@@ -5,11 +5,11 @@
 //
 
 
-const init          = require('./db').init;
-const unInit        = require('./db').unInit;
-const getConnection = require('./db').getConnection;
+const createConnection = require('./db').createConnection;
+const disconnect = require('./db').disconnect;
 
-exports.init   = init;
-exports.unInit = unInit;
-exports.getConnection  = getConnection;
+
+exports.createConnection = createConnection;
+exports.disconnect = disconnect;
+
 

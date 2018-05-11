@@ -6,17 +6,11 @@
  * @author zm
  *
 */
-
-
 const mysqlClient = require('mysql');
-const dbName = 'test';
 
-var connection = null;
-
-
-function init() {
+function createConnection(dbName) {
     //创建一个connection
-    connection = mysqlClient.createConnection({
+    var connection = mysqlClient.createConnection({
 
         host: '127.0.0.1',       //主机
         user: 'root',            //MySQL认证用户名
@@ -38,18 +32,17 @@ function init() {
         console.log('[connection connect]  succeed!');
 
     });
-}
-
-function getConnection() {
     return connection;
 }
 
-function unInit() {
-    if(connection)
-    connection.end();
+
+function disconnect(connection) {
+    if (connection) {
+        connection.end();
+    }
 }
 
-exports.init   = init;
-exports.unInit = unInit;
-exports.getConnection  = getConnection;
+exports.createConnection = createConnection;
+exports.disconnect = disconnect;
+
 

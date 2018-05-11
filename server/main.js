@@ -71,7 +71,8 @@ app.get('/getPersonTimes', function (req, res) {
     
     var res_arry = new Array();
 
-    db.getConnection().query(sqlStr, function (error, results, fields) {
+    var connection = db.createConnection('test');
+    connection.query(sqlStr, function (error, results, fields) {
         if (error) {
             throw error;
         }
@@ -89,16 +90,12 @@ app.get('/getPersonTimes', function (req, res) {
         }
         res.send(res_arry);
     });
+    db.disconnect(connection);
 });
 
 
 httpServer.listen(httpport, function () {
     console.log('listening on ' + ip.address() + ":" + httpport);
 });
-
-/*
-    db
-*/
-db.init();
 
 
