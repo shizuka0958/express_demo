@@ -41,7 +41,6 @@ function init() {
 }
 
 function getConnection() {
-    console.log(connection);
     return connection;
 }
 

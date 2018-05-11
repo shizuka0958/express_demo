@@ -39,13 +39,39 @@ app.use(cors())
 app.use(require('express').static(path.join(__dirname, 'public')));
 
 
-app.get('/test', function (req, res) {
+app.get('/getPersonTimes', function (req, res) {
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
+   
 
-    var time_arry = new Array();
+    var sqlStr = 'select camera_id,count(*) as count from face where ';
 
-    db.getConnection().query("select * from face", function (error, results, fields) {
+    if(req.query.hasOwnProperty('cameraID')){
+        
+    }else{
+        if(req.query.hasOwnProperty('gender')){
+            sqlStr = sqlStr+ 'gender ='+ "'"+ req.query.gender+ "'"+' ';
+        }
+        if(req.query.hasOwnProperty('startAge')){
+            sqlStr = sqlStr+ 'and age >'+ req.query.startAge+' ';
+        }
+        if(req.query.hasOwnProperty('endAge')){
+            sqlStr = sqlStr+ 'and age <'+ req.query.endAge+' ';
+        }
+        if(req.query.hasOwnProperty('startTime')){
+            sqlStr = sqlStr+ 'and entry_time >= '+ "'"+req.query.startTime+"'"+' ';
+        }
+        if(req.query.hasOwnProperty('endTime')){
+            sqlStr = sqlStr+ 'and entry_time <= '+ "'"+req.query.endTime+"'"+' ';
+        }
+        sqlStr = sqlStr +'group by camera_id'
+        
+    }
+    console.log(sqlStr);
+    
+    var res_arry = new Array();
+
+    db.getConnection().query(sqlStr, function (error, results, fields) {
         if (error) {
             throw error;
         }
@@ -54,13 +80,14 @@ app.get('/test', function (req, res) {
             for (var i = 0; i < results.length; i++) {
 
                 var doc = {};
-                doc.time = moment(results[i].entry_time).format("YYYY-MM-DD HH:mm:ss");
-                console.log(doc.time);
-                time_arry.push(doc);
-                console.log(time_arry.length);
+                //doc.time = moment(results[i].entry_time).format("YYYY-MM-DD HH:mm:ss");
+                doc.cameraID = results[i].camera_id;
+                doc.count = results[i].count;
+                res_arry.push(doc);
+              
             }
         }
-        res.send(time_arry);
+        res.send(res_arry);
     });
 });
 

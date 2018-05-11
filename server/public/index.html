@@ -12,7 +12,7 @@ $(function(){
 		//发送JSONP异步请求
 		$.ajax({
 			type:"get",
-			url:"http://192.168.2.52:8080/test?name=zm&pwd=123",
+			url:"http://192.168.2.52:8080/getPersonTimes?gender=male&startAge=1&endAge=80&startTime=2018-01-10 12:00:00&endTime=2018-05-11 12:00:00",
 			dataType:"json",
 			success:function(data){
                 console.log(typeof data);
