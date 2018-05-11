@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<script src="./jquery.2.0.0.min.js"></script>
 	<script>
-$(function(){
-	$("#btnSearch").on("click",function(){
-		var menu=$("#menu");
+		$(function () {
+			$("#btnSearch").on("click", function () {
+				var menu = $("#menu");
 
-		//发送JSONP异步请求
-		$.ajax({
-			type:"get",
-			url:"http://192.168.2.52:8080/getPersonTimes?cameraID=1&gender=male&startAge=1&endAge=80&startTime=2018-01-10 12:00:00&endTime=2018-05-11 12:00:00",
-			//url:"http://192.168.2.52:8080/getDetailData?cameraID=1&gender=male&startAge=1&endAge=80&startTime=2018-01-10 12:00:00&endTime=2018-05-11 12:00:00",
-			dataType:"json",
-			success:function(data){
-                console.log(typeof data);
+				//发送JSONP异步请求
+				$.ajax({
+					type: "get",
+					//url:"http://192.168.2.52:8080/getPersonTimes?cameraID=1&gender=male&startAge=1&endAge=80&startTime=2018-01-10 12:00:00&endTime=2018-05-11 12:00:00",
+					//url:"http://192.168.2.52:8080/getDetailData?cameraID=1&gender=male&startAge=1&endAge=80&startTime=2018-01-10 12:00:00&endTime=2018-05-11 12:00:00",
+					url:"http://192.168.2.52:8080/getCameraList",
 
-               
-                $("<p>").text(data.message).appendTo(menu);
-				console.log(data);
-			},
-			error:function(){
-				menu.html("搜索失败！");
-			},
-			beforeSend:function(){
-				menu.html("正在搜索中......");
-			}
+					dataType: "json",
+					success: function (data) {
+						
+						console.log(data);
+					},
+					error: function () {
+						menu.html("搜索失败！");
+					},
+					beforeSend: function () {
+						menu.html("正在搜索中......");
+					}
+				});
+			});
+
 		});
-	});
-
-});
 	</script>
 </head>
+
 <body>
 	<h2>菜谱搜索</h2>
 	<input type="text" id="txtSearch">
@@ -41,4 +42,5 @@ $(function(){
 
 	<div id="menu"></div>
 </body>
+
 </html>

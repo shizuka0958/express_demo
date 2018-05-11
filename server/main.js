@@ -142,6 +142,29 @@ app.get('/getDetailData', function (req, res) {
     db.disconnect(connection);
 });
 
+app.get('/getCameraList', function (req, res) {
+    res.set('Content-Type', 'application/json');
+   
+    var sqlStr = 'select camera_id from face group by camera_id';
+
+    var res_arry = new Array();
+
+    var connection = db.createConnection('test');
+    connection.query(sqlStr, function (error, results, fields) {
+        if (error) {
+            throw error;
+        }
+        if (results) {
+
+            for (var i = 0; i < results.length; i++) { 
+                res_arry.push(results[i].camera_id);
+            }
+        }
+        res.send(res_arry);
+    });
+    db.disconnect(connection);
+});
+
 httpServer.listen(httpport, function () {
     console.log('listening on ' + ip.address() + ":" + httpport);
 });

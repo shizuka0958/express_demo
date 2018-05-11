@@ -38,6 +38,7 @@ function createConnection(dbName) {
 
 function disconnect(connection) {
     if (connection) {
+        console.log('[connection disconnect]  succeed!');
         connection.end();
     }
 }
