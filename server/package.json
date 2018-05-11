@@ -1,0 +1,19 @@
+{
+  "name": "face-server",
+  "version": "1.0.0",
+  "description": "face analysis system",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "license": "UNLICENSED",
+  "author": "Moca",
+  "dependencies": {
+    "express": "4.x",
+    "ip": "1.1.5",
+    "moment": "^2.22.1",
+    "mysql": "^2.15.0",
+    "socket.io": "2.0.3"
+  },
+  "devDependencies": {}
+}
