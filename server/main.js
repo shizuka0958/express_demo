@@ -42,33 +42,31 @@ app.use(require('express').static(path.join(__dirname, 'public')));
 app.get('/getPersonTimes', function (req, res) {
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
-   
 
     var sqlStr = 'select camera_id,count(*) as count from face where ';
 
-    if(req.query.hasOwnProperty('cameraID')){
-        
-    }else{
-        if(req.query.hasOwnProperty('gender')){
-            sqlStr = sqlStr+ 'gender ='+ "'"+ req.query.gender+ "'"+' ';
-        }
-        if(req.query.hasOwnProperty('startAge')){
-            sqlStr = sqlStr+ 'and age >'+ req.query.startAge+' ';
-        }
-        if(req.query.hasOwnProperty('endAge')){
-            sqlStr = sqlStr+ 'and age <'+ req.query.endAge+' ';
-        }
-        if(req.query.hasOwnProperty('startTime')){
-            sqlStr = sqlStr+ 'and entry_time >= '+ "'"+req.query.startTime+"'"+' ';
-        }
-        if(req.query.hasOwnProperty('endTime')){
-            sqlStr = sqlStr+ 'and entry_time <= '+ "'"+req.query.endTime+"'"+' ';
-        }
-        sqlStr = sqlStr +'group by camera_id'
-        
+    if (req.query.hasOwnProperty('cameraID')) {
+        sqlStr = sqlStr + 'camera_id =' + "'" + req.query.cameraID + "'" + ' ';
     }
+    if (req.query.hasOwnProperty('gender')) {
+        sqlStr = sqlStr + 'and gender =' + "'" + req.query.gender + "'" + ' ';
+    }
+    if (req.query.hasOwnProperty('startAge')) {
+        sqlStr = sqlStr + 'and age >' + req.query.startAge + ' ';
+    }
+    if (req.query.hasOwnProperty('endAge')) {
+        sqlStr = sqlStr + 'and age <' + req.query.endAge + ' ';
+    }
+    if (req.query.hasOwnProperty('startTime')) {
+        sqlStr = sqlStr + 'and entry_time >= ' + "'" + req.query.startTime + "'" + ' ';
+    }
+    if (req.query.hasOwnProperty('endTime')) {
+        sqlStr = sqlStr + 'and entry_time <= ' + "'" + req.query.endTime + "'" + ' ';
+    }
+    sqlStr = sqlStr + 'group by camera_id'
+
     console.log(sqlStr);
-    
+
     var res_arry = new Array();
 
     var connection = db.createConnection('test');
@@ -81,11 +79,10 @@ app.get('/getPersonTimes', function (req, res) {
             for (var i = 0; i < results.length; i++) {
 
                 var doc = {};
-                //doc.time = moment(results[i].entry_time).format("YYYY-MM-DD HH:mm:ss");
                 doc.cameraID = results[i].camera_id;
                 doc.count = results[i].count;
                 res_arry.push(doc);
-              
+
             }
         }
         res.send(res_arry);
@@ -93,6 +90,57 @@ app.get('/getPersonTimes', function (req, res) {
     db.disconnect(connection);
 });
 
+app.get('/getDetailData', function (req, res) {
+    res.set('Content-Type', 'application/json');
+    console.log(JSON.stringify(req.query));
+
+    var sqlStr = 'select camera_id,pic_id,gender,age,entry_time from face where ';
+
+    if (req.query.hasOwnProperty('cameraID')) {
+        sqlStr = sqlStr + 'camera_id =' + "'" + req.query.cameraID + "'" + ' ';
+    }
+    if (req.query.hasOwnProperty('gender')) {
+        sqlStr = sqlStr + 'and gender =' + "'" + req.query.gender + "'" + ' ';
+    }
+    if (req.query.hasOwnProperty('startAge')) {
+        sqlStr = sqlStr + 'and age >' + req.query.startAge + ' ';
+    }
+    if (req.query.hasOwnProperty('endAge')) {
+        sqlStr = sqlStr + 'and age <' + req.query.endAge + ' ';
+    }
+    if (req.query.hasOwnProperty('startTime')) {
+        sqlStr = sqlStr + 'and entry_time >= ' + "'" + req.query.startTime + "'" + ' ';
+    }
+    if (req.query.hasOwnProperty('endTime')) {
+        sqlStr = sqlStr + 'and entry_time <= ' + "'" + req.query.endTime + "'";
+    }
+
+    console.log(sqlStr);
+
+    var res_arry = new Array();
+
+    var connection = db.createConnection('test');
+    connection.query(sqlStr, function (error, results, fields) {
+        if (error) {
+            throw error;
+        }
+        if (results) {
+
+            for (var i = 0; i < results.length; i++) {
+
+                var doc = {};
+                doc.cameraID = results[i].camera_id;
+                doc.pic_id = results[i].pic_id;
+                doc.gender = results[i].gender;
+                doc.age = results[i].age;
+                doc.entry_time = moment(results[i].entry_time).format("YYYY-MM-DD HH:mm:ss");
+                res_arry.push(doc);
+            }
+        }
+        res.send(res_arry);
+    });
+    db.disconnect(connection);
+});
 
 httpServer.listen(httpport, function () {
     console.log('listening on ' + ip.address() + ":" + httpport);
