@@ -40,35 +40,43 @@ app.use(require('express').static(path.join(__dirname, 'public')));
 
 
 app.get('/getPersonTimes', function (req, res) {
+    console.log('[request]: /getPersonTimes');
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
     var sqlStr = 'select CamID,count(*) as count from face where ';
 
-    if (req.query.hasOwnProperty('camID')) {
+    if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
         sqlStr = sqlStr + 'CamID =' + "'" + req.query.camID + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('sex')) {
+    if (req.query.hasOwnProperty('sex') && ('' != req.query.sex)) {
         sqlStr = sqlStr + 'Sex =' + "'" + req.query.sex + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('startAge')) {
-        sqlStr = sqlStr + 'Age >' + req.query.startAge + ' and ';
+    if (req.query.hasOwnProperty('startAge') && ('' != req.query.startAge)) {
+        sqlStr = sqlStr + 'Age >' + "'"+ req.query.startAge +"'"+ ' and ';
     }
-    if (req.query.hasOwnProperty('endAge')) {
-        sqlStr = sqlStr + 'Age <' + req.query.endAge + ' and ';
+    if (req.query.hasOwnProperty('endAge') && ('' != req.query.endAge)) {
+        sqlStr = sqlStr + 'Age <' + "'" + req.query.endAge + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('startTime')) {
+    if (req.query.hasOwnProperty('startTime') && ('' != req.query.startTime)) {
         sqlStr = sqlStr + 'time >= ' + "'" + req.query.startTime + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('endTime')) {
+    if (req.query.hasOwnProperty('endTime') && ('' != req.query.endTime)) {
         sqlStr = sqlStr + 'time <= ' + "'" + req.query.endTime + "'" + ' and ';
     }
 
     console.log(sqlStr);
-    
-    if('{}' != JSON.stringify(req.query)){
-        sqlStr = sqlStr.slice(0,-4);
-        console.log(sqlStr);
+  
+    var hasFilter = false;
+    for(key in req.query){ 
+        if('' != req.query[key]){
+            sqlStr = sqlStr.slice(0,-4); //remove and
+            hasFilter = true;
+            break;
+        }
+    }
+    if(!hasFilter){
+        sqlStr = sqlStr.slice(0,-6);  //remove where
     }
     
     sqlStr = sqlStr + 'group by CamID'
@@ -99,35 +107,56 @@ app.get('/getPersonTimes', function (req, res) {
 });
 
 app.get('/getDetailData', function (req, res) {
+    console.log('[request]: /getDetailData');
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
     var sqlStr = 'select CamID,Pic,Sex,Age,time from face where ';
 
-    if (req.query.hasOwnProperty('camID')) {
+    if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
         sqlStr = sqlStr + 'CamID =' + "'" + req.query.camID + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('sex')) {
+    if (req.query.hasOwnProperty('sex') && ('' != req.query.sex)) {
         sqlStr = sqlStr + 'Sex =' + "'" + req.query.sex + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('startAge')) {
-        sqlStr = sqlStr + 'Age >' + req.query.startAge + ' and ';
+    if (req.query.hasOwnProperty('startAge') && ('' != req.query.startAge)) {
+        sqlStr = sqlStr + 'Age >'  + "'" + req.query.startAge + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('endAge')) {
-        sqlStr = sqlStr + 'Age <' + req.query.endAge + ' and ';
+    if (req.query.hasOwnProperty('endAge') && ('' != req.query.endAge)) {
+        sqlStr = sqlStr + 'Age <' + "'" + req.query.endAge + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('startTime')) {
+    if (req.query.hasOwnProperty('startTime') && ('' != req.query.startTime)) {
         sqlStr = sqlStr + 'time >= ' + "'" + req.query.startTime + "'" + ' and ';
     }
-    if (req.query.hasOwnProperty('endTime')) {
+    if (req.query.hasOwnProperty('endTime') && ('' != req.query.endTime)) {
         sqlStr = sqlStr + 'time <= ' + "'" + req.query.endTime + "'" + ' and ';
+    }
+    
+    console.log(sqlStr);
+    var hasFilter = false;
+    for(key in req.query){ 
+        if('' != req.query[key]){
+            sqlStr = sqlStr.slice(0,-4); //remove and
+            hasFilter = true;
+            break;
+        }
+    }
+    if(!hasFilter){
+        sqlStr = sqlStr.slice(0,-6);  //remove where
+    }
+    
+
+    //limit 
+    if (req.query.hasOwnProperty('limitStartPos') && ('' != req.query.limitStartPos)) {
+        sqlStr = sqlStr + ' limit ' + req.query.limitStartPos;
+    }
+    if (req.query.hasOwnProperty('limitNumber') && ('' != req.query.limitNumber)) {
+        sqlStr = sqlStr + ' , ' + req.query.limitNumber;
+    }else{
+        sqlStr = sqlStr + ' , 10';
     }
 
     console.log(sqlStr);
-    if('{}' != JSON.stringify(req.query)){
-        sqlStr = sqlStr.slice(0,-4);
-        console.log(sqlStr);
-    }
     
     var res_arry = new Array();
 
@@ -144,6 +173,8 @@ app.get('/getDetailData', function (req, res) {
                 doc.pic = results[i].Pic;
                 doc.sex = results[i].Sex;
                 doc.age = results[i].Age;
+                doc.topID = results[i].TopID;
+                doc.topName = results[i].TopName;
                 doc.time = moment(results[i].time).format("YYYY-MM-DD HH:mm:ss");
                 res_arry.push(doc);
             }
@@ -154,6 +185,7 @@ app.get('/getDetailData', function (req, res) {
 });
 
 app.get('/getCameraList', function (req, res) {
+    console.log('[request]: /getCameraList');
     res.set('Content-Type', 'application/json');
    
     var sqlStr = 'select CamID from face group by CamID';

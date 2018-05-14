@@ -12,7 +12,7 @@ function createConnection(dbName) {
     //创建一个connection
     var connection = mysqlClient.createConnection({
 
-        host: '127.0.0.1',       //主机
+        host: 'localhost',       //主机
         user: 'root',            //MySQL认证用户名
         password: 'nzai123!@#',
         port: '3306',
