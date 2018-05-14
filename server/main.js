@@ -16,10 +16,10 @@ const mysql = require('mysql');
 const httpport = process.env.PORT || 8080;
 
 // use pooling
-var pool  = mysql.createPool({
-    connectionLimit : 100,
+var pool = mysql.createPool({
+    connectionLimit: 100,
     host: 'localhost',
-    user: 'root', 
+    user: 'root',
     password: 'nzai123!@#',
     database: 'test'
 });
@@ -62,7 +62,7 @@ app.get('/getPersonTimes', function (req, res) {
         sqlStr = sqlStr + 'Sex =' + "'" + req.query.sex + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('startAge') && ('' != req.query.startAge)) {
-        sqlStr = sqlStr + 'Age >' + "'"+ req.query.startAge +"'"+ ' and ';
+        sqlStr = sqlStr + 'Age >' + "'" + req.query.startAge + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('endAge') && ('' != req.query.endAge)) {
         sqlStr = sqlStr + 'Age <' + "'" + req.query.endAge + "'" + ' and ';
@@ -75,43 +75,98 @@ app.get('/getPersonTimes', function (req, res) {
     }
 
     console.log(sqlStr);
-  
+
     var hasFilter = false;
-    for(key in req.query){ 
-        if('' != req.query[key]){
-            sqlStr = sqlStr.slice(0,-4); //remove and
+    for (key in req.query) {
+        if ('' != req.query[key]) {
+            sqlStr = sqlStr.slice(0, -4); //remove and
             hasFilter = true;
             break;
         }
     }
-    if(!hasFilter){
-        sqlStr = sqlStr.slice(0,-6);  //remove where
+    if (!hasFilter) {
+        sqlStr = sqlStr.slice(0, -6);  //remove where
     }
-    
+
     sqlStr = sqlStr + 'group by CamID'
 
     console.log(sqlStr);
 
-    var res_arry = new Array();
-
     //var connection = db.createConnection('test');
-    pool.query(sqlStr, function (error, results, fields) {
-        if (error) {
-            throw error;
-        }
-        if (results) {
 
-            for (var i = 0; i < results.length; i++) {
-
-                var doc = {};
-                doc.camID = results[i].CamID;
-                doc.count = results[i].count;
-                res_arry.push(doc);
-
+    var p1 = new Promise(function (resolve, reject) {
+        pool.query('select CamID from face group by CamID', function (error, results, fields) {
+            if (error) {
+                throw error;
             }
-        }
-        res.send(res_arry);
+            if (results) {
+                var array1 = new Array();
+                for (var i = 0; i < results.length; i++) {
+
+                    console.log(results[i].CamID);
+                    array1.push(results[i].CamID);
+                }
+            }
+            resolve(array1);
+        });
+
     });
+
+    var p2 = new Promise(function (resolve, reject) {
+        pool.query(sqlStr, function (error, results, fields) {
+            if (error) {
+                throw error;
+            }
+            if (results) {
+                var array2 = new Array();
+                for (var i = 0; i < results.length; i++) {
+    
+                    var doc = {};
+                    doc.camID = results[i].CamID;
+                    doc.count = results[i].count;
+                    array2.push(doc);
+    
+                }
+            }
+            resolve(array2);
+        });
+    });
+
+
+    // 同时执行p1和p2，并在它们都完成后执行then:
+    Promise.all([p1, p2]).then(function (results) {
+        console.log(results); // 获得一个Array: ['P1', 'P2']
+
+        var res_array = new Array();
+        for(var i =0;i < results[0].length;i++){
+            var doc = {};
+            doc.camID = results[0][i];
+            var isZero = true;
+            var count = 0;
+            for(var j =0;j < results[1].length;j++){
+                console.log('results[0][i] = '+results[0][i]);
+                console.log('results[1][j] = '+results[1][j]);
+                console.log('results[1][j].CamID = '+results[1][j].camID);
+                if(results[0][i] === results[1][j].camID){
+                    isZero = false;
+                    count = results[1][j].count;
+                    console.log('---break---');
+                    break;
+                }
+            }
+
+            if(isZero){
+                doc.count = 0;
+            }else{
+                doc.count = count;
+            }
+           
+            res_array.push(doc);
+        }
+        console.log(res_array);
+        res.send(res_array);
+    });
+
     //db.disconnect(connection);
 });
 
@@ -129,7 +184,7 @@ app.get('/getDetailData', function (req, res) {
         sqlStr = sqlStr + 'Sex =' + "'" + req.query.sex + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('startAge') && ('' != req.query.startAge)) {
-        sqlStr = sqlStr + 'Age >'  + "'" + req.query.startAge + "'" + ' and ';
+        sqlStr = sqlStr + 'Age >' + "'" + req.query.startAge + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('endAge') && ('' != req.query.endAge)) {
         sqlStr = sqlStr + 'Age <' + "'" + req.query.endAge + "'" + ' and ';
@@ -140,33 +195,33 @@ app.get('/getDetailData', function (req, res) {
     if (req.query.hasOwnProperty('endTime') && ('' != req.query.endTime)) {
         sqlStr = sqlStr + 'time <= ' + "'" + req.query.endTime + "'" + ' and ';
     }
-    
+
     console.log(sqlStr);
     var hasFilter = false;
-    for(key in req.query){ 
-        if('' != req.query[key]){
-            sqlStr = sqlStr.slice(0,-4); //remove and
+    for (key in req.query) {
+        if ('' != req.query[key]) {
+            sqlStr = sqlStr.slice(0, -4); //remove and
             hasFilter = true;
             break;
         }
     }
-    if(!hasFilter){
-        sqlStr = sqlStr.slice(0,-6);  //remove where
+    if (!hasFilter) {
+        sqlStr = sqlStr.slice(0, -6);  //remove where
     }
-    
+
 
     //limit 
     if (req.query.hasOwnProperty('limitStartPos') && ('' != req.query.limitStartPos)) {
         if (req.query.hasOwnProperty('limitNumber') && ('' != req.query.limitNumber)) {
             sqlStr = sqlStr + ' limit ' + req.query.limitStartPos + ' , ' + req.query.limitNumber;
-        }else{
-            sqlStr = sqlStr + ' limit ' + req.query.limitStartPos +  ' , ' + '10';
+        } else {
+            sqlStr = sqlStr + ' limit ' + req.query.limitStartPos + ' , ' + '10';
         }
     }
-    
+
 
     console.log(sqlStr);
-    
+
     var res_arry = new Array();
 
     //var connection = db.createConnection('test');
@@ -196,7 +251,7 @@ app.get('/getDetailData', function (req, res) {
 app.get('/getCameraList', function (req, res) {
     console.log('[request]: /getCameraList');
     res.set('Content-Type', 'application/json');
-   
+
     var sqlStr = 'select CamID from face group by CamID';
 
     var res_arry = new Array();
@@ -208,7 +263,7 @@ app.get('/getCameraList', function (req, res) {
         }
         if (results) {
 
-            for (var i = 0; i < results.length; i++) { 
+            for (var i = 0; i < results.length; i++) {
                 res_arry.push(results[i].CamID);
             }
         }
