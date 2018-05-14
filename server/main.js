@@ -10,10 +10,19 @@ var path = require('path');
 var ip = require('ip');
 var moment = require('moment');
 var cors = require('cors')
-
-var db = require('./db/');
+const mysql = require('mysql');
+//var db = require('./db/');
 
 const httpport = process.env.PORT || 8080;
+
+// use pooling
+var pool  = mysql.createPool({
+    connectionLimit : 100,
+    host: 'localhost',
+    user: 'root', 
+    password: 'nzai123!@#',
+    database: 'test'
+});
 
 // method 1：
 // var allowCrossDomain = function (req, res, next) {
@@ -85,8 +94,8 @@ app.get('/getPersonTimes', function (req, res) {
 
     var res_arry = new Array();
 
-    var connection = db.createConnection('test');
-    connection.query(sqlStr, function (error, results, fields) {
+    //var connection = db.createConnection('test');
+    pool.query(sqlStr, function (error, results, fields) {
         if (error) {
             throw error;
         }
@@ -103,7 +112,7 @@ app.get('/getPersonTimes', function (req, res) {
         }
         res.send(res_arry);
     });
-    db.disconnect(connection);
+    //db.disconnect(connection);
 });
 
 app.get('/getDetailData', function (req, res) {
@@ -111,7 +120,7 @@ app.get('/getDetailData', function (req, res) {
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
-    var sqlStr = 'select CamID,Pic,Sex,Age,time from face where ';
+    var sqlStr = 'select CamID,Pic,Sex,Age,time,TopID,TopName from face where ';
 
     if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
         sqlStr = sqlStr + 'CamID =' + "'" + req.query.camID + "'" + ' and ';
@@ -148,20 +157,20 @@ app.get('/getDetailData', function (req, res) {
 
     //limit 
     if (req.query.hasOwnProperty('limitStartPos') && ('' != req.query.limitStartPos)) {
-        sqlStr = sqlStr + ' limit ' + req.query.limitStartPos;
+        if (req.query.hasOwnProperty('limitNumber') && ('' != req.query.limitNumber)) {
+            sqlStr = sqlStr + ' limit ' + req.query.limitStartPos + ' , ' + req.query.limitNumber;
+        }else{
+            sqlStr = sqlStr + ' limit ' + req.query.limitStartPos +  ' , ' + '10';
+        }
     }
-    if (req.query.hasOwnProperty('limitNumber') && ('' != req.query.limitNumber)) {
-        sqlStr = sqlStr + ' , ' + req.query.limitNumber;
-    }else{
-        sqlStr = sqlStr + ' , 10';
-    }
+    
 
     console.log(sqlStr);
     
     var res_arry = new Array();
 
-    var connection = db.createConnection('test');
-    connection.query(sqlStr, function (error, results, fields) {
+    //var connection = db.createConnection('test');
+    pool.query(sqlStr, function (error, results, fields) {
         if (error) {
             throw error;
         }
@@ -181,7 +190,7 @@ app.get('/getDetailData', function (req, res) {
         }
         res.send(res_arry);
     });
-    db.disconnect(connection);
+    //db.disconnect(connection);
 });
 
 app.get('/getCameraList', function (req, res) {
@@ -192,8 +201,8 @@ app.get('/getCameraList', function (req, res) {
 
     var res_arry = new Array();
 
-    var connection = db.createConnection('test');
-    connection.query(sqlStr, function (error, results, fields) {
+    //var connection = db.createConnection('test');
+    pool.query(sqlStr, function (error, results, fields) {
         if (error) {
             throw error;
         }
@@ -205,7 +214,7 @@ app.get('/getCameraList', function (req, res) {
         }
         res.send(res_arry);
     });
-    db.disconnect(connection);
+    //db.disconnect(connection);
 });
 
 httpServer.listen(httpport, function () {
