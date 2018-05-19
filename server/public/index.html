@@ -1,46 +1,165 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html class="no-js" ng-app="myApp">
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<script src="./jquery.2.0.0.min.js"></script>
-	<script>
-		$(function () {
-			$("#btnSearch").on("click", function () {
-				var menu = $("#menu");
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>摄像头列表</title>
+<meta name="description" content="这是一个 index 页面">
+<meta name="keywords" content="index">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="icon" type="image/png" href="assets/i/favicon.png">
+<link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+<meta name="apple-mobile-web-app-title" content="Amaze UI" />
+<link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+<link rel="stylesheet" href="assets/css/admin.css">
+<link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/amazeui.datetimepicker.js"></script>
+<script src="js/angular.min.js"></script>
+<style>
+  .am-form-field{
+    font-size: 1.2rem !important
+  }
+  .am-btn{
+    font-size: 1.2rem !important
+  }
+  .am-selected-btn{
+    width: 100px !important;
+    text-align: center;
+    text-align-last: center;
+  }
+  .datepick{
+    margin-top: -43px;
+  }
+  input{
+    cursor: pointer !important
 
-				//发送JSONP异步请求
-				$.ajax({
-					type: "get",
-					url:"http://192.168.2.52:8080/getPersonTimes?sex=1&startAge=1&endAge=80&startTime=2018-01-10 12:00:00&endTime=2018-05-11 12:00:00",
-					//url:"http://192.168.2.52:8080/getDetailData?sex=1&startAge=0&endAge=80&startTime=2018-01-10 17:00:00&endTime=2018-05-11 12:00:00",
-					//url:"http://192.168.2.52:8080/getCameraList",
-
-					dataType: "json",
-					success: function (data) {
-						
-						console.log(data);
-					},
-					error: function () {
-						menu.html("搜索失败！");
-					},
-					beforeSend: function () {
-						menu.html("正在搜索中......");
-					}
-				});
-			});
-
-		});
-	</script>
+  }
+</style>
+</head>
+<body>
+<!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p><![endif]-->
 </head>
 
-<body>
-	<h2>菜谱搜索</h2>
-	<input type="text" id="txtSearch">
-	<input type="button" value="搜索" id="btnSearch">
+<body ng-controller="indexController" ng-cloak>
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand"><img src="assets/i/logo.png"></div>
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+  </div>
+</header>
 
-	<div id="menu"></div>
+<div class="am-cf admin-main"> 
+
+<div class="nav-navicon admin-main admin-sidebar">
+    
+    
+    <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎系统管理员</div>
+    <div class="sideMenu">
+      <h3 class="am-icon-flag"><em></em> <a href="index.html" style="color:white">摄像头列表</a></h3>
+      <ul>
+        <li><a href="details.html">&ensp;摄像头详情</a></li>
+        <!-- <li><a href="replay.html">&ensp;摄像头回放</a></li> -->
+      </ul>
+    </div>
+    <!-- sideMenu End --> 
+    <script type="text/javascript">
+			jQuery(".sideMenu").slide({
+				titCell:"h3", //鼠标触发对象
+				targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
+				effect:"slideDown", //targetCell下拉效果
+				delayTime:300 , //效果时间
+				triggerTime:150, //鼠标延迟触发时间（默认150）
+				defaultPlay:true,//默认是否执行效果（默认true）
+				returnDefault:true //鼠标从.sideMen移走后返回默认状态（默认false）
+				});
+		</script> 
+</div>
+
+<div class=" admin-content">
+<div class="admin">
+    <div class="admin-biaoge">
+      <div class="xinxitj">摄像头汇总</div>
+      <table class="am-table am-table-bordered">
+        <thead>
+          <tr>
+            <th style="width:12%;line-height:60px">摄像头</th>
+            <th style="width:15%;line-height:60px">
+              <select data-am-selected>
+                <option value="no">客流人数</option>
+                <option value="trueNo">客流人次</option>
+              </select>
+            </th>
+           <!--  <th style="width:15%">
+              <div class="datepick"><input type="text" id="datetimepicker3" class="am-form-field" style="width:100%" readonly onchange="dateChange(event)"></div>
+            </th> -->
+            <th style="width:30%">
+              <div>开始时间: <input type="text" id="datetimepicker1" class="am-form-field" style="width:60%;display:inline-block" readonly onchange="startChange(event)"></div>
+              <div>结束时间: <input type="text" id="datetimepicker2" class="am-form-field" style="width:60%;display:inline-block" readonly onchange="endChange(event)"></div>
+            </th>
+            <th style="width:15%;line-height:60px">
+              <select data-am-selected onchange="sexSelect(event)">
+                <option value="0">性别选择</option>
+                <option value="1">女</option>
+                <option value="2">男</option>
+              </select>
+            </th>
+            <th style="width:15%;line-height:60px">
+              <select data-am-selected onchange="ageSelect(event)">
+                <option value="0">年龄段选择</option>
+                <option value="20"> <20 </option>
+                <option value="20,30"> 20-30 </option>
+                <option value="30,40"> 30-40 </option>
+                <option value="40,50"> 40-50 </option>
+                <option value="50"> >50 </option>
+              </select>
+            </th>
+            <th style="line-height:60px">详情</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(xindex,x) in cameraList">
+            <td>摄像头{{x}}</td>
+            <td>{{timesCount[xindex].count}}</td>
+            <!-- <td>{{timeList[xindex].count}}</td> -->
+            <td>{{timeSelectList[xindex].count}}</td>
+            <td>{{sexList[xindex].count}}</td>
+            <td>{{ageList[xindex].count}}</td>
+            <td><a href="details.html?id={{xindex+1}}">点击查看详情</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+</div>
+<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="modal2">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">正在载入...</div>
+    <div class="am-modal-bd">
+      <span class="am-icon-spinner am-icon-spin"></span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/polyfill/rem.min.js"></script>
+<script src="assets/js/polyfill/respond.min.js"></script>
+<script src="assets/js/amazeui.legacy.js"></script>
+<![endif]--> 
+
+<!--[if (gte IE 9)|!(IE)]><!--> 
+<script src="assets/js/amazeui.min.js"></script>
+<script src="js/index.js"></script>
+<!--<![endif]-->
+<script>
+
+</script>
+
+
 </body>
-
 </html>
