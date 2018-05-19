@@ -92,11 +92,11 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   ageSelect = function(event){
   	if($(event.target).val()!=0){
 		if($(event.target).val()==20){
-			age1 = '20';
-			age2 = ''
+			age1 = '0';
+			age2 = '20'
 		}else if($(event.target).val()==50){
-			age1 = '';
-			age2 = '50'
+			age1 = '50';
+			age2 = ''
 		}else{
 			age3 = $(event.target).val().split(',')
 			age1 = age3[0]
@@ -111,7 +111,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
 
 // 获得摄像头列表
   $scope.getCameraList = function(){
-    $http.get('http://192.168.2.52:8080/getCameraList').success(function(res){
+    $http.get('http://localhost:8080/getCameraList').success(function(res){
       console.log(res)
       for(var i=0;i<res.data.list.length;i++){
         $('.selectDate select').append('<option value="'+res.data.list[i]+'">摄像头'+res.data.list[i]+'</option>');
@@ -126,9 +126,11 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
    $scope.getCameraList()
   // 查询
 	$scope.check = function(){
+    $scope.pos=0;
+    $scope.page = 1;
     $('#modal2').modal();
     $scope.userList=''
-		$http.get('http://192.168.2.52:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
+		$http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
 			console.log(res)
       $scope.userList = res.data.list
       $scope.totalCount = res.data.totalCount;
@@ -152,7 +154,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     $('#modal2').modal();
     if($scope.pos>1){
       $scope.pos-=5;
-      $http.get('http://192.168.2.52:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
+      $http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page--;
@@ -173,7 +175,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     $('#modal2').modal();
     if($scope.pos<$scope.totalCount){
       $scope.pos+=5;
-    $http.get('http://192.168.2.52:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
+    $http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page++

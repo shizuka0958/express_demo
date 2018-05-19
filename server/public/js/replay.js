@@ -69,7 +69,7 @@ $scope.src = 'http://forocomm.oos.ctyunapi.cn/test/QQ%E8%A7%86%E9%A2%91_B5C8B09B
   }
 // 获得摄像头列表
   $scope.getCameraList = function(){
-    $http.get('http://192.168.2.52:8080/getCameraList').success(function(res){
+    $http.get('http://localhost:8080/getCameraList').success(function(res){
       console.log(res)
       for(var i=0;i<res.data.list.length;i++){
         $('.selectDate select').append('<option value="'+res.data.list[i]+'">摄像头'+res.data.list[i]+'</option>');

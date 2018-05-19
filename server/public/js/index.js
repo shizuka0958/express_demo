@@ -92,7 +92,7 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
 		}else if($(event.target).val()==2){
 			var sex = 2
 		}
-		$http.get('http://192.168.2.52:8080/getPersonTimes?camID=&sex='+sex+'&startTime=&endTime=&startAge=&endAge=').success(function(res){
+		$http.get('http://localhost:8080/getPersonTimes?camID=&sex='+sex+'&startTime=&endTime=&startAge=&endAge=').success(function(res){
 				$scope.sexList = res.data.list
 				console.log($scope.sexList[0].count);
 				setTimeout(function(){
@@ -103,7 +103,7 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
 			})
   	}else{
   		sex='';
-  		$http.get('http://192.168.2.52:8080/getPersonTimes?camID=&sex='+sex+'&startTime=&endTime=&startAge=&endAge=').success(function(res){
+  		$http.get('http://localhost:8080/getPersonTimes?camID=&sex='+sex+'&startTime=&endTime=&startAge=&endAge=').success(function(res){
 				$scope.sexList = res.data.list
 				console.log($scope.sexList[0].count)
 				sext++;
@@ -134,7 +134,7 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
 			var age2 = age3[1]
 			console.log(age1+','+age2)
 		}
-		$http.get('http://192.168.2.52:8080/getPersonTimes?camID=&sex=&startTime=&endTime=&startAge='+age1+'&endAge='+age2).success(function(res){
+		$http.get('http://localhost:8080/getPersonTimes?camID=&sex=&startTime=&endTime=&startAge='+age1+'&endAge='+age2).success(function(res){
 				console.log(res)
 				$scope.ageList = res.data.list;
 				setTimeout(function(){
@@ -146,7 +146,7 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
 	  	}else{
 	  		age1='';
 	  		age2='';
-	  		$http.get('http://192.168.2.52:8080/getPersonTimes?camID=&sex=&startTime=&endTime=&startAge='+age1+'&endAge='+age2).success(function(res){
+	  		$http.get('http://localhost:8080/getPersonTimes?camID=&sex=&startTime=&endTime=&startAge='+age1+'&endAge='+age2).success(function(res){
 				console.log(res)
 				$scope.ageList = res.data.list;
 				setTimeout(function(){
@@ -166,7 +166,7 @@ $scope.timeSelect = function(mark){
 		var a = $('#datetimepicker1').val();
 		var b = $('#datetimepicker2').val();
 		console.log(a+','+b)
-		$http.get('http://192.168.2.52:8080/getPersonTimes?camID=&sex=&startTime='+a+'&endTime='+b+'&startAge=&endAge=').success(function(res){
+		$http.get('http://localhost:8080/getPersonTimes?camID=&sex=&startTime='+a+'&endTime='+b+'&startAge=&endAge=').success(function(res){
 			console.log(res)
 			$scope.timeSelectList = res.data.list
 			setTimeout(function(){
@@ -181,7 +181,7 @@ $scope.timeSelect(1);
 // 获得摄像头列表
 	$scope.getCameraList = function(){
 		$('#modal2').modal();
-		$http.get('http://192.168.2.52:8080/getCameraList').success(function(res){
+		$http.get('http://localhost:8080/getCameraList').success(function(res){
 			$scope.cameraList = res.data.list;
 			setTimeout(function(){
 		        $('#modal2').modal('close')
@@ -194,7 +194,7 @@ $scope.timeSelect(1);
 	
 	// 获得人次
 	$scope.times = function(){
-		$http.get('http://192.168.2.52:8080/getPersonTimes?camID=&sex=&startTime=&endTime=&startAge=&endAge=').success(function(res){
+		$http.get('http://localhost:8080/getPersonTimes?camID=&sex=&startTime=&endTime=&startAge=&endAge=').success(function(res){
 			$scope.timesCount = res.data.list
 		}).error(function(res){
 			// alert("数据异常，请稍后再试")

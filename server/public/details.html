@@ -296,10 +296,12 @@
                   <tbody>
                     <tr ng-repeat="(xindex,x) in userList">
                       <td>{{xindex+1}}</td>
-                      <td><img src="profile.png" alt="">{{x.pic}}</td>
+                     <!-- <td><img ng-src="D:/tool/10w/20180518/14/374000.jpg" alt=""></td> -->
+                      <td><img ng-src="374000.jpg" alt=""></td>
                       <td>{{x.age}}</td>
-                      <td ng-if="x.sex==1">女</td>
-                      <td ng-if="x.sex==2">男</td>
+                      <td ng-if="x.sex==1">男</td>
+                      <td ng-if="x.sex==2">女</td>
+                      <td ng-if="!x.sex">未知</td>
                       <td>{{x.time}}</td>
                       <td>{{x.topName}}</td>
                       <td>{{x.topName}}</td>
