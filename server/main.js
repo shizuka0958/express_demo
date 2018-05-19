@@ -20,8 +20,8 @@ var pool = mysql.createPool({
     connectionLimit: 100,
     host: 'localhost',
     user: 'root',
-    password: 'nzai123!@#',
-    database: 'test'
+    password: 'password',
+    database: 'nz_moca'
 });
 
 // method 1：
@@ -46,14 +46,14 @@ var pool = mysql.createPool({
 // method 3: use cors
 app.use(cors())
 app.use(require('express').static(path.join(__dirname, 'public')));
-
+app.use(require('express').static(path.join("D:\\tool\\10w\\")));
 
 app.get('/getPersonTimes', function (req, res) {
     console.log('[request]: /getPersonTimes');
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
-    var sqlStr = 'select CamID,count(*) as count from face where ';
+    var sqlStr = 'select CamID,count(*) as count from ht_result where ';
 
     if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
         sqlStr = sqlStr + 'CamID =' + "'" + req.query.camID + "'" + ' and ';
@@ -62,7 +62,7 @@ app.get('/getPersonTimes', function (req, res) {
         sqlStr = sqlStr + 'Sex =' + "'" + req.query.sex + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('startAge') && ('' != req.query.startAge)) {
-        sqlStr = sqlStr + 'Age >' + "'" + req.query.startAge + "'" + ' and ';
+        sqlStr = sqlStr + 'Age >=' + "'" + req.query.startAge + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('endAge') && ('' != req.query.endAge)) {
         sqlStr = sqlStr + 'Age <' + "'" + req.query.endAge + "'" + ' and ';
@@ -91,7 +91,7 @@ app.get('/getPersonTimes', function (req, res) {
     console.log(sqlStr);
 
     var p1 = new Promise(function (resolve, reject) {
-        pool.query('select CamID from face group by CamID', function (error, results, fields) {
+        pool.query('select CamID from ht_result group by CamID', function (error, results, fields) {
             if (error) {
                 reject(error);
             }
@@ -181,8 +181,8 @@ app.get('/getDetailData', function (req, res) {
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
-    var sqlStr = 'select CamID,Pic,Sex,Age,time,TopID,TopName from face where ';
-    var sqlStr_count = 'select count(*) as count from face where '
+    var sqlStr = 'select CamID,Pic,Sex,Age,time,TopID,TopName from ht_result where ';
+    var sqlStr_count = 'select count(*) as count from ht_result where '
 
     var sqlStrFilter = '';
     if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
@@ -192,7 +192,7 @@ app.get('/getDetailData', function (req, res) {
         sqlStrFilter = sqlStrFilter + 'Sex =' + "'" + req.query.sex + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('startAge') && ('' != req.query.startAge)) {
-        sqlStrFilter = sqlStrFilter + 'Age >' + "'" + req.query.startAge + "'" + ' and ';
+        sqlStrFilter = sqlStrFilter + 'Age >=' + "'" + req.query.startAge + "'" + ' and ';
     }
     if (req.query.hasOwnProperty('endAge') && ('' != req.query.endAge)) {
         sqlStrFilter = sqlStrFilter + 'Age <' + "'" + req.query.endAge + "'" + ' and ';
@@ -212,10 +212,12 @@ app.get('/getDetailData', function (req, res) {
             break;
         }
     }
+   
     if (!hasFilter) {
-        sqlStrFilter = sqlStrFilter.slice(0, -6);  //remove where
+        //sqlStrFilter = sqlStrFilter.slice(0, -6);  //remove where
+        sqlStr = sqlStr.slice(0, -6);
+        sqlStr_count = sqlStr_count.slice(0, -6);
     }
-
 
     //limit 
     var sqlStrLimit = '';
@@ -292,7 +294,7 @@ app.get('/getCameraList', function (req, res) {
     console.log('[request]: /getCameraList');
     res.set('Content-Type', 'application/json');
 
-    var sqlStr = 'select CamID from face group by CamID';
+    var sqlStr = 'select CamID from ht_result group by CamID';
 
     //var connection = db.createConnection('test');
     pool.query(sqlStr, function (error, results, fields) {
