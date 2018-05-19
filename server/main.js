@@ -229,7 +229,7 @@ app.get('/getDetailData', function (req, res) {
         }
     }
 
-    sqlStr = sqlStr + sqlStrFilter + sqlStrLimit;
+    sqlStr = sqlStr + sqlStrFilter + ' order by time desc ' + sqlStrLimit;
     sqlStr_count = sqlStr_count + sqlStrFilter;
 
     console.log(sqlStr);
@@ -271,6 +271,7 @@ app.get('/getDetailData', function (req, res) {
                     doc.age = results[i].Age;
                     doc.topID = results[i].TopID;
                     doc.topName = results[i].TopName;
+                    doc.LibID = results[i].LibID;
                     doc.time = moment(results[i].time).format("YYYY-MM-DD HH:mm:ss");
                     list.push(doc);
                 }
