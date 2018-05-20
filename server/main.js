@@ -7,6 +7,7 @@
 var app = require('express')();
 var httpServer = require('http').Server(app);
 var path = require('path');
+var fs = require('fs');
 var ip = require('ip');
 var moment = require('moment');
 var cors = require('cors')
@@ -46,7 +47,7 @@ var pool = mysql.createPool({
 // method 3: use cors
 app.use(cors())
 app.use(require('express').static(path.join(__dirname, 'public')));
-app.use(require('express').static(path.join("D:\\tool\\10w\\")));
+//app.use(require('express').static(path.join("D:\\tool\\10w\\")));
 
 app.get('/getPersonTimes', function (req, res) {
     console.log('[request]: /getPersonTimes');
@@ -263,6 +264,11 @@ app.get('/getDetailData', function (req, res) {
 
                 var list = [];
                 for (var i = 0; i < results.length; i++) {
+                    var pic_path = 'D:/tool/10w/' + results[i].Pic;
+                    
+                    var imagedata = fs.readFileSync(pic_path);
+                    let src = 'data:image/jpg;base64,' + imagedata.toString("base64");
+                    doc.src = src;
 
                     var doc = {};
                     doc.camID = results[i].CamID;
