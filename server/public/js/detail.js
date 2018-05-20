@@ -127,6 +127,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
    $scope.getCameraList()
   // 查询
 	$scope.check = function(){
+    $('.pagination').addClass('hide')
     $scope.pos=0;
     $scope.page = 1;
     $('#modal2').modal();
@@ -138,6 +139,8 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
       $scope.totalPage = Math.ceil($scope.totalCount/10)
       if($scope.totalCount>10){
         $('.pagination').removeClass('hide')
+        $('.next').attr('disabled',false)
+        $('.prev').attr('disabled',true)
       }else if($scope.userList.length ==0){
         $('#modal1').modal();
       }
