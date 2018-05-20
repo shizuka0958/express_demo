@@ -156,6 +156,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
       },500)
 		}).error(function(res){
 			// alert("数据异常，请稍后再试")
+      $scope.totalCount=0
 		})
 	}
   $scope.check();
