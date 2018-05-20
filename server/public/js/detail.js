@@ -69,17 +69,17 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   }
 // 时间段选择
   chooseDate = function(event){
-    $('.selectSub button').attr('disabled',false)
+    // $('.selectSub button').attr('disabled',false)
     $('#datetimepicker1').datetimepicker('hide');
     $('#datetimepicker2').datetimepicker('hide');
     $('#datetimepicker2').datetimepicker('setStartDate', $('#datetimepicker1').val());
     time4 = $('#datetimepicker1').val();
     time5 = $('#datetimepicker2').val();
-    console.log((new Date(time4.replace(/-/g,"\/"))) > (new Date(time5.replace(/-/g,"\/"))))
-    if((new Date(time4.replace(/-/g,"\/"))) > (new Date(time5.replace(/-/g,"\/")))){
-      alert("结束时间必须晚于开始时间")
-      $('.selectSub button').attr('disabled',true)
-    }
+    // console.log((new Date(time4.replace(/-/g,"\/"))) > (new Date(time5.replace(/-/g,"\/"))))
+    // if((new Date(time4.replace(/-/g,"\/"))) > (new Date(time5.replace(/-/g,"\/")))){
+    //   alert("结束时间必须晚于开始时间")
+    //   $('.selectSub button').attr('disabled',true)
+    // }
   }
 
   	// 性别选择
