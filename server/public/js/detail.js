@@ -131,7 +131,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     $scope.page = 1;
     $('#modal2').modal();
     $scope.userList=''
-		$http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
+		$http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
 			console.log(res)
       $scope.userList = res.data.list
       $scope.totalCount = res.data.totalCount;
@@ -154,8 +154,8 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     $('.next').attr('disabled',false)
     $('#modal2').modal();
     if($scope.pos>1){
-      $scope.pos-=5;
-      $http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
+      $scope.pos-=10;
+      $http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page--;
@@ -175,8 +175,8 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     $('.prev').attr('disabled',false)
     $('#modal2').modal();
     if($scope.pos<$scope.totalCount){
-      $scope.pos+=5;
-    $http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=5').success(function(res){
+      $scope.pos+=10;
+    $http.get('http://localhost:8080/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page++
