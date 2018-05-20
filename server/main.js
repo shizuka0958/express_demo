@@ -268,9 +268,9 @@ app.get('/getDetailData', function (req, res) {
                     
                     var imagedata = fs.readFileSync(pic_path);
                     let src = 'data:image/jpg;base64,' + imagedata.toString("base64");
-                    doc.src = src;
 
                     var doc = {};
+                    doc.src = src;
                     doc.camID = results[i].CamID;
                     doc.pic = results[i].Pic;
                     doc.sex = results[i].Sex;
