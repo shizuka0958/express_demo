@@ -135,8 +135,8 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
 			console.log(res)
       $scope.userList = res.data.list
       $scope.totalCount = res.data.totalCount;
-      $scope.totalPage = Math.ceil($scope.totalCount/5)
-      if($scope.totalCount>5){
+      $scope.totalPage = Math.ceil($scope.totalCount/10)
+      if($scope.totalCount>10){
         $('.pagination').removeClass('hide')
       }else if($scope.userList.length ==0){
         $('#modal1').modal();

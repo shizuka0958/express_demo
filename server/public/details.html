@@ -133,7 +133,7 @@
           width: 150px;
         }
         .selectTime{
-          margin-top: 10px
+          margin-top: 10px;
         }
         .selectTime input{
           cursor: pointer !important
@@ -311,6 +311,7 @@
                       <td ng-if="x.LibID==1">熟客</td>
                       <td ng-if="x.LibID==2">VIP</td>
                       <td ng-if="x.LibID==3">黑名单</td>
+                      <td ng-if="!x.LibID">未知</td>
                     </tr>
                   </tbody>
                 </table>
@@ -360,6 +361,17 @@
 <script src="assets/js/amazeui.min.js"></script>
 <script src="js/detail.js"></script>
 <!--<![endif]-->
+<script>
+$(function(){
+     $('.rightCon').scroll = function() { 
+console.info(window.scrollY); 
+} 
+
+})
+     
+
+
+</script>
 
 
 </body>
