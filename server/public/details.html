@@ -308,6 +308,7 @@
                       <td ng-if="!x.sex">未知</td>
                       <td>{{x.time}}</td>
                       <td>{{x.topName}}</td>
+                      <td ng-if="x.LibID==0">普通顾客</td>
                       <td ng-if="x.LibID==1">熟客</td>
                       <td ng-if="x.LibID==2">VIP</td>
                       <td ng-if="x.LibID==3">黑名单</td>
