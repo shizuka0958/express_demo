@@ -71,6 +71,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   chooseDate = function(event){
     $('#datetimepicker1').datetimepicker('hide');
     $('#datetimepicker2').datetimepicker('hide');
+    $('#datetimepicker2').datetimepicker('setStartDate', $('#datetimepicker1').val());
     time4 = $('#datetimepicker1').val();
     time5 = $('#datetimepicker2').val();
   }
