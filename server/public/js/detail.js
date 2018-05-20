@@ -92,7 +92,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   ageSelect = function(event){
   	if($(event.target).val()!=0){
 		if($(event.target).val()==20){
-			age1 = '0';
+			age1 = '';
 			age2 = '20'
 		}else if($(event.target).val()==50){
 			age1 = '50';

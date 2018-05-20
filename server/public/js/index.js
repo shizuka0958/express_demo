@@ -123,11 +123,11 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
   	}
   	if($(event.target).val()!=0){
 		if($(event.target).val()==20){
-			var age1 = '20';
-			var age2 = ''
-		}else if($(event.target).val()==50){
 			var age1 = '';
-			var age2 = '50'
+			var age2 = '20'
+		}else if($(event.target).val()==50){
+			var age1 = '50';
+			var age2 = ''
 		}else{
 			var age3 = $(event.target).val().split(',')
 			var age1 = age3[0]
