@@ -304,9 +304,9 @@
                       <td>{{xindex+1}}</td>
                       <td><img ng-src="{{x.src}}" alt=""></td>
                       <td>{{x.age}}</td>
-                      <td ng-if="x.sex==1"><span ng-if="x.sex==1">男</span><span ng-if="x.sex==2">女</span><span ng-if="!x.sex">未知</span></td>
+                      <td><span ng-if="x.sex==1">男</span><span ng-if="x.sex==2">女</span><span ng-if="!x.sex">未知</span></td>
                       <td>{{x.time}}</td>
-                      <td><span ng-if="x.topName==null">未知</span><span ng-if="x.topName">{{x.topName}}</span></td>
+                      <td><span ng-if="x.topName.length==0">未知</span><span ng-if="x.topName">{{x.topName}}</span></td>
                       <td><span ng-if="x.LibID==0">普通顾客</span><span ng-if="x.LibID==1">熟客</span><span ng-if="x.LibID==2">VIP</span><span ng-if="x.LibID==3">黑名单</span><span  ng-if="x.LibID>3">未知</span></td>
                     </tr>
                   </tbody>
