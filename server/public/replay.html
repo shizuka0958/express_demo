@@ -221,6 +221,7 @@
 
         </div>
         <div class="rightCon">
+        <img src="" alt="" id="img1">
           <div class="m">
             <video id="my-video" class="video-js" controls preload="auto" width="900" height="500"
              data-setup="{}">
@@ -276,6 +277,10 @@
       var myPlayer = this;
       // myPlayer.play();
     });
+    $.get('http://192.168.1.6:8080/getDetailData',function(data){
+      console.log(data.src)
+      $('#img1').attr('src',data.src)
+    })
 </script>
 
 
