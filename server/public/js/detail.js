@@ -120,7 +120,8 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
       }
   $('#cam option[value='+camID+']').attr('selected','true')
     }).error(function(res){
-      // alert("数据异常，请稍后再试")
+        $('#modal2').modal('close')
+      alert("数据异常，请稍后再试")
     })
   }
    $scope.getCameraList()

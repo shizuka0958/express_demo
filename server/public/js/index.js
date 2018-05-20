@@ -187,7 +187,8 @@ $scope.timeSelect(1);
 		        $('#modal2').modal('close')
 		      },300)
 		}).error(function(res){
-			// alert("数据异常，请稍后再试")
+		       $('#modal2').modal('close')
+			alert("数据异常，请稍后再试")
 		})
 	}
 	$scope.getCameraList();
