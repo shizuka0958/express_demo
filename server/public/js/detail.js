@@ -15,9 +15,12 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   var d1 = d-5;
   var h = date.getHours();
   var minute = date.getMinutes();
+  var minute1 = minute+5
   minute = minute < 10 ? ('0' + minute) : minute;
+  minute1 = minute1 < 10 ? ('0' + minute1) : minute1;
   var time1 = y + '-' + m + '-' + d1+' '+h+':'+minute;
   var time2 = y + '-' + m + '-' + d+' '+h+':'+minute;
+  var timeEnd = y + '-' + m + '-' + d+' '+h+':'+minute1;
   var time3 = y + '-' + m + '-' + d;
   time4 = time1
   time5 = time2
@@ -56,7 +59,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   $('#datetimepicker1').datetimepicker('setStartDate', '2015-12-31');
   $('#datetimepicker1').datetimepicker('setEndDate', time2);
   $('#datetimepicker2').datetimepicker('setStartDate', $('#datetimepicker1').val());
-  $('#datetimepicker2').datetimepicker('setEndDate', time2);
+  $('#datetimepicker2').datetimepicker('setEndDate', timeEnd);
 
   // 摄像机选择
   camSelect = function(event){
