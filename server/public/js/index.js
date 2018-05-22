@@ -8,36 +8,60 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
   var y = date.getFullYear();
   var m = date.getMonth() + 1;
   m = m < 10 ? ('0' + m) : m;
-  var d = date.getDate();
-  d = d < 10 ? ('0' + d) : d;
-  var d1 = d-5;
+  var m1 = m-1+2;
+  if(m1 > 12){
+    m1=1
+    y=y+1;
+  }
+  m1 = m1 < 10 ? ('0' + m1) : m1;
+  var m2 = m-1;
+  if(m2==0){
+    m2=12;
+    y=y-1
+  }
+  m2 = m2 < 10 ? ('0' + m2) : m2;
+  // var d = date.getDate();
+  // d = d < 10 ? ('0' + d) : d;
+  var d = 15
   var h = date.getHours();
   var minute = date.getMinutes();
   var minute1 = minute+5
   minute = minute < 10 ? ('0' + minute) : minute;
   minute1 = minute1 < 10 ? ('0' + minute1) : minute1;
-  var time1 = y + '-' + m + '-' + d1+' '+h+':'+minute;
-  var time2 = y + '-' + m + '-' + d+' '+h+':'+minute;
-  var time3 = y + '-' + m + '-' + d
-  var timeEnd = y + '-' + m + '-' + d+' '+h+':'+minute1;
+  var time1 = y + '-' + m2 + '-' + d+' '+h+':'+minute;
+  var time2 = y + '-' + m1 + '-' + d+' '+h+':'+minute;
+  var timeEnd = y + '-' + m1 + '-' + d+' '+h+':'+minute1;
+  var time3 = y + '-' + m + '-' + d;
 
    setInterval(function(){
   	  date = new Date();
-	  var y = date.getFullYear();
-	  var m = date.getMonth() + 1;
-	  m = m < 10 ? ('0' + m) : m;
-	  var d = date.getDate();
-	  d = d < 10 ? ('0' + d) : d;
-	  var d1 = d-5;
-	  var h = date.getHours();
-	  var minute = date.getMinutes();
-	  var minute1 = minute+5
-	  minute = minute < 10 ? ('0' + minute) : minute;
-	  minute1 = minute1 < 10 ? ('0' + minute1) : minute1;
-	  var time1 = y + '-' + m + '-' + d1+' '+h+':'+minute;
-	  var time2 = y + '-' + m + '-' + d+' '+h+':'+minute;
-	  var time3 = y + '-' + m + '-' + d
-	  var timeEnd = y + '-' + m + '-' + d+' '+h+':'+minute1;
+  var y = date.getFullYear();
+  var m = date.getMonth() + 1;
+  m = m < 10 ? ('0' + m) : m;
+  var m1 = m-1+2;
+  if(m1 > 12){
+    m1=1
+    y=y+1;
+  }
+  m1 = m1 < 10 ? ('0' + m1) : m1;
+  var m2 = m-1;
+  if(m2==0){
+    m2=12;
+    y=y-1
+  }
+  m2 = m2 < 10 ? ('0' + m2) : m2;
+  // var d = date.getDate();
+  // d = d < 10 ? ('0' + d) : d;
+  var d = 15
+  var h = date.getHours();
+  var minute = date.getMinutes();
+  var minute1 = minute+5
+  minute = minute < 10 ? ('0' + minute) : minute;
+  minute1 = minute1 < 10 ? ('0' + minute1) : minute1;
+  var time1 = y + '-' + m2 + '-' + d+' '+h+':'+minute;
+  var time2 = y + '-' + m1 + '-' + d+' '+h+':'+minute;
+  var timeEnd = y + '-' + m1 + '-' + d+' '+h+':'+minute1;
+  var time3 = y + '-' + m + '-' + d;
       $('#datetimepicker1').datetimepicker('setEndDate', time2);
       $('#datetimepicker2').datetimepicker('setEndDate', timeEnd);
   },300000)
