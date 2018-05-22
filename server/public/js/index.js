@@ -21,6 +21,27 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
   var time3 = y + '-' + m + '-' + d
   var timeEnd = y + '-' + m + '-' + d+' '+h+':'+minute1;
 
+   setInterval(function(){
+  	  date = new Date();
+	  var y = date.getFullYear();
+	  var m = date.getMonth() + 1;
+	  m = m < 10 ? ('0' + m) : m;
+	  var d = date.getDate();
+	  d = d < 10 ? ('0' + d) : d;
+	  var d1 = d-5;
+	  var h = date.getHours();
+	  var minute = date.getMinutes();
+	  var minute1 = minute+5
+	  minute = minute < 10 ? ('0' + minute) : minute;
+	  minute1 = minute1 < 10 ? ('0' + minute1) : minute1;
+	  var time1 = y + '-' + m + '-' + d1+' '+h+':'+minute;
+	  var time2 = y + '-' + m + '-' + d+' '+h+':'+minute;
+	  var time3 = y + '-' + m + '-' + d
+	  var timeEnd = y + '-' + m + '-' + d+' '+h+':'+minute1;
+      $('#datetimepicker1').datetimepicker('setEndDate', time2);
+      $('#datetimepicker2').datetimepicker('setEndDate', timeEnd);
+  },300000)
+
   // $('#chooseDate').attr('value',time3)
   $.fn.datetimepicker.dates['zh-CN'] = {
   days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
