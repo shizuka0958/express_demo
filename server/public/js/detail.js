@@ -7,7 +7,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   var age1='';
   var age2='';
   var date = new Date();
-  
+
      function getBeforeDate(n) {
         var n = n;
         var d = new Date();
@@ -211,7 +211,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
    $scope.getCameraList()
   // 查询
 	$scope.check = function(){
-    $('.pagination').addClass('hide')
+    // $('.pagination').addClass('hide')
     $scope.pos=0;
     $scope.page = 1;
     $('#modal2').modal();
@@ -261,6 +261,34 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   // 下一页
   $scope.next = function(){
     $('.prev').attr('disabled',false)
+    $('#modal2').modal();
+    if($scope.pos<$scope.totalCount){
+      $scope.pos+=10;
+    $http.get('/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+      console.log(res)
+      $scope.userList = res.data.list
+      $scope.page++
+      if($scope.page==$scope.totalPage){
+          $('.next').attr('disabled',true)
+        }
+      setTimeout(function(){
+        $('#modal2').modal('close')
+      },200)
+    }).error(function(res){
+      console.log(res)
+    })
+  }
+  }
+      $scope.totalPage = 20
+
+  selectPage = function(){
+    $scope.enterPage=$('#myPage').val();
+    if($scope.enterPage>$scope.totalPage){
+      $scope.enterPage = $scope.totalPage
+      $('#myPage').val($scope.totalPage)
+    }
+  }
+  $scope.jump = function(){
     $('#modal2').modal();
     if($scope.pos<$scope.totalCount){
       $scope.pos+=10;
