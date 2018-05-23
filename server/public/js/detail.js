@@ -211,7 +211,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
    $scope.getCameraList()
   // 查询
 	$scope.check = function(){
-    // $('.pagination').addClass('hide')
+    $('.pagination').addClass('hide')
     $scope.pos=0;
     $scope.page = 1;
     $('#modal2').modal();
@@ -279,33 +279,36 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     })
   }
   }
-      $scope.totalPage = 20
-
   selectPage = function(){
     $scope.enterPage=$('#myPage').val();
-    if($scope.enterPage>$scope.totalPage){
+    var tt = /^\d+$/g;
+    if(!tt.test($scope.enterPage) || $scope.enterPage<=0){
+        $('#jump').attr('disabled',true)
+    }else if($scope.enterPage>$scope.totalPage){
       $scope.enterPage = $scope.totalPage
       $('#myPage').val($scope.totalPage)
+      $('#jump').attr('disabled',false)
+    }else{
+      $('#jump').attr('disabled',false)
     }
   }
   $scope.jump = function(){
     $('#modal2').modal();
-    if($scope.pos<$scope.totalCount){
-      $scope.pos+=10;
+      $scope.pos = $scope.enterPage*10-1;
     $http.get('/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
-      $scope.userList = res.data.list
-      $scope.page++
-      if($scope.page==$scope.totalPage){
+      if($scope.enterPage==$scope.totalPage){
           $('.next').attr('disabled',true)
+        }else if($scope.enterPage==1){
+          $('.prev').attr('disabled',true)
         }
+      $scope.userList = res.data.list
+      $scope.page=$scope.enterPage
       setTimeout(function(){
         $('#modal2').modal('close')
       },200)
     }).error(function(res){
       console.log(res)
     })
-  }
-
   }
 }])

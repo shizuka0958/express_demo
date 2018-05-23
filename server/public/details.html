@@ -312,12 +312,12 @@
                     </tr>
                   </tbody>
                 </table>
-                  <div class="pagination">
+                  <div class="pagination hide">
                     <button class="am-btn am-btn-primary b1 prev" ng-click="prev()" disabled="true">上一页</button>
                     <span style="padding-left:20px;font-size:20px">{{page}}/{{totalPage}}</span>
                     <button class="am-btn am-btn-primary b1 next" ng-click="next()">下一页</button>
                     <input type="number" min="1" class="am-form-field" style="width:80px;display:inline-block;margin-left:10px" placeholder="{{totalPage}}" id="myPage" onkeyup="selectPage()">
-                    <button class="am-btn am-btn-primary" style="margin-left:-10px" ng-click="jump()">跳转到</button>
+                    <button class="am-btn am-btn-primary" style="margin-left:-5px" ng-click="jump()" id="jump" disabled="true">跳转到</button>
                   </div>
             </div>
         </div>
