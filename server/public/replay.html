@@ -15,11 +15,13 @@
 <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
 <link rel="stylesheet" href="assets/css/detail.css">
 <link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
-<link href="css/video-js.css" rel="stylesheet">
+<link href="http://vjs.zencdn.net/5.5.3/video-js.css" rel="stylesheet">
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/amazeui.datetimepicker.js"></script>
 <script src="js/angular.min.js"></script>
+<script>
+</script>
 <style>
           .main{
             width: 97%;
@@ -149,6 +151,12 @@
           margin-right: auto;
           margin-top: 20px;
         }
+        input{
+          cursor: pointer !important
+        }
+        .vjs-modal-dialog-content{
+          display: none
+        }
 </style>
 </head>
 <body ng-controller="detailController" ng-cloak>
@@ -212,7 +220,8 @@
               </select>
             </div>
             <div class="selectTime">
-              <div>日期选择: <br><input type="text" id="datetimepicker1" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
+              <div>开始时间: <br><input type="text" id="datetimepicker1" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
+              <div>结束时间: <br><input type="text" id="datetimepicker2" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
             </div>
             
             <div class="selectSub">
@@ -221,13 +230,20 @@
 
         </div>
         <div class="rightCon">
-        <img src="" alt="" id="img1">
           <div class="m">
-            <video id="my-video" class="video-js" controls preload="auto" width="900" height="500"
-             data-setup="{}">
-              <!-- <source  type="video/mp4"> -->
+            <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" width="900" height="500"
+             data-setup="{'techOrder':['html5','flash','other supported tech']}" type="application/x-mpegURL" poster="timg.jpeg">
+              <source  type="video/mp4">
+              <!-- <source src="http://101.89.214.156:8000/vod/rc/cam02.m3u8?stime=20180522T164700&dur=10000" type="application/x-mpegURL"> -->
+              <p class="vjs-no-js"> To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+
+            </video>
+            <!--  <video id="my-video" class="video-js" controls preload="auto" width="900" height="500"
+             data-setup="{}" type="video/mp4">
+              <source  type="video/mp4">
               <p class="vjs-no-js"> To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a> </p>
             </video>
+
           </div>
         </div>
        
@@ -268,14 +284,17 @@
 <!--[if (gte IE 9)|!(IE)]><!--> 
 <script src="assets/js/amazeui.min.js"></script>
 <script src="js/replay.js"></script>
-<script src="js/video.min.js"></script> 
+<!-- <script src="js/video.min.js"></script>  -->
+<script src="http://vjs.zencdn.net/5.5.3/video.js"></script>
 <script src="http://vjs.zencdn.net/5.19/lang/zh-CN.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.12.2/videojs-contrib-hls.js" type="text/javascript"></script>
 <!--<![endif]-->
 <script>
+    videojs.options.flash.swf = "video-js.swf";
    var myPlayer = videojs('my-video');
     videojs("my-video").ready(function(){
       var myPlayer = this;
-      // myPlayer.play();
+      myPlayer.play();
     });
     $.get('http://192.168.1.6:8080/getDetailData',function(data){
       console.log(data.src)
