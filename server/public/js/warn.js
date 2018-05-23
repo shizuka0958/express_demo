@@ -1,5 +1,5 @@
 var app = angular.module('myApp',[]);
-app.controller('detailController',['$scope','$http',function($scope,$http){
+app.controller('warnController',['$scope','$http',function($scope,$http){
 
   var x1 = 1;
   var camID;
@@ -96,19 +96,20 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     $('#datetimepicker1').datetimepicker('setEndDate', time2);
     $('#datetimepicker2').datetimepicker('setEndDate', timeEnd);
   },300000)
-// $scope.src = 'http://forocomm.oos.ctyunapi.cn/test/QQ%E8%A7%86%E9%A2%91_B5C8B09B2E9B9EB9FEABC9AE9AFD5742.mp4'
-// $scope.src = 'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"'
 
-  // function GetQueryString(name) {
-  //     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-  //     var r = window.location.search.substr(1).match(reg);
-  //     if(r != null) return decodeURIComponent(r[2]);
-  //     return null;
-  // }
-  // camID = GetQueryString('id')
-  // if(!camID){
-  //   camID=''
-  // }
+  $scope.pos=0;
+  $scope.page = 1
+
+  function GetQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r != null) return decodeURIComponent(r[2]);
+      return null;
+  }
+  camID = GetQueryString('id')
+  if(!camID){
+    camID=''
+  }
   $.fn.datetimepicker.dates['zh-CN'] = {
   days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
   daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
@@ -122,11 +123,11 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
 };
   $('#datetimepicker1').datetimepicker({
     format: 'yyyy-mm-dd hh:ii',
-    language:  'zh-CN'
+  	language:  'zh-CN'
   }).attr('value',time1)
   $('#datetimepicker2').datetimepicker({
     format: 'yyyy-mm-dd hh:ii',
-    language:  'zh-CN'
+  	language:  'zh-CN'
   }).attr('value',time2)
   $('#datetimepicker1').datetimepicker('setStartDate', '2015-12-31');
   $('#datetimepicker1').datetimepicker('setEndDate', time2);
@@ -142,7 +143,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     }
   
   }
-  // 时间段选择
+// 时间段选择
   chooseDate = function(event){
     // $('.selectSub button').attr('disabled',false)
     $('#datetimepicker1').datetimepicker('hide');
@@ -158,6 +159,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
     time5 = $('#datetimepicker2').val();
   }
 
+
 // 获得摄像头列表
   $scope.getCameraList = function(){
     $http.get('/getCameraList').success(function(res){
@@ -167,22 +169,82 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
 
         console.log(123)
       }
-  // $('#cam option[value='+camID+']').attr('selected','true')
+  $('#cam option[value='+camID+']').attr('selected','true')
+    }).error(function(res){
+        $('#modal2').modal('close')
+      alert("数据异常，请稍后再试")
+    })
+  }
+   $scope.getCameraList()
+  // 查询
+	$scope.check = function(){
+    $('.pagination').addClass('hide')
+    $scope.pos=0;
+    $scope.page = 1;
+    $('#modal2').modal();
+    $scope.userList=''
+		$http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+			console.log(res)
+      $scope.userList = res.data.list
+      $scope.totalCount = res.data.totalCount;
+      $scope.totalPage = Math.ceil($scope.totalCount/10)
+      if($scope.totalCount>10){
+        $('.pagination').removeClass('hide')
+        $('.next').attr('disabled',false)
+        $('.prev').attr('disabled',true)
+      }else if($scope.userList.length ==0){
+        $('#modal1').modal();
+      }
+      setTimeout(function(){
+        $('#modal2').modal('close')
+      },500)
+		}).error(function(res){
+			// alert("数据异常，请稍后再试")
+      $scope.totalCount=0
+		})
+	}
+  $scope.check();
+  // 上一页
+  $scope.prev = function(){
+    $('.next').attr('disabled',false)
+    $('#modal2').modal();
+    if($scope.pos>1){
+      $scope.pos-=10;
+      $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+      console.log(res)
+      $scope.userList = res.data.list
+      $scope.page--;
+      setTimeout(function(){
+        $('#modal2').modal('close')
+      },200)
     }).error(function(res){
       // alert("数据异常，请稍后再试")
     })
-  }
-  $scope.check = function(){
-    if(camID){
-         // $scope.src = 'http://forocomm.oos.ctyunapi.cn/test/test.mp4'
-      $scope.src = 'http://101.89.214.156:8000/vod/rc/cam02.m3u8?stime=20180522T164700&dur=10000'
-       var myPlayer =  videojs("my-video");  //初始化视频
-      myPlayer.src('http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400')
-      // myPlayer.src($scope.src)
-      }else{
-        alert("请选择摄像头")
-      }
     }
-   
-    
+    if($scope.pos==0){
+      $('.prev').attr('disabled',true)
+    }
+  }
+  // 下一页
+  $scope.next = function(){
+    $('.prev').attr('disabled',false)
+    $('#modal2').modal();
+    if($scope.pos<$scope.totalCount){
+      $scope.pos+=10;
+    $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+      console.log(res)
+      $scope.userList = res.data.list
+      $scope.page++
+      if($scope.page==$scope.totalPage){
+          $('.next').attr('disabled',true)
+        }
+      setTimeout(function(){
+        $('#modal2').modal('close')
+      },200)
+    }).error(function(res){
+      console.log(res)
+    })
+  }
+
+  }
 }])

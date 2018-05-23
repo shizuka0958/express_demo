@@ -150,7 +150,7 @@
         }
 </style>
 </head>
-<body ng-controller="detailController" ng-cloak>
+<body ng-controller="warnController" ng-cloak>
 <!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p><![endif]-->
 </head>
 
@@ -171,8 +171,8 @@
       <div class="sideMenu">
       <h3 class="am-icon-flag"><em></em> <a href="index.html">摄像头列表</a></h3>
       <ul>
-        <li><a href="details.html" style="color:white">&ensp;摄像头详情</a></li>
-        <li><a href="warn.html">&ensp;报警详情</a></li>
+        <li><a href="details.html">&ensp;摄像头详情</a></li>
+        <li><a href="warn.html" style="color:white">&ensp;报警详情</a></li>
         <!-- <li><a href="replay.html">&ensp;摄像头回放</a></li> -->
       </ul>
     </div>
@@ -262,27 +262,8 @@
               <div>开始时间: <br><input type="text" id="datetimepicker1" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
               <div>结束时间: <br><input type="text" id="datetimepicker2" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
             </div>
-           <div class="selectSex">
-              <span>性别选择<br></span>
-              <select data-am-selected onchange="sexSelect(event)">
-                <option value="0">性别选择</option>
-                <option value="1">男</option>
-                <option value="2">女</option>
-              </select>
-            </div>
-            <div class="selectAge">
-              <span>年龄选择<br></span>
-              <select data-am-selected onchange="ageSelect(event)">
-                <option value="0">年龄段选择</option>
-                <option value="20"> <20 </option>
-                <option value="20,30"> 20-30 </option>
-                <option value="30,40"> 30-40 </option>
-                <option value="40,50"> 40-50 </option>
-                <option value="50"> >50 </option>
-              </select>
-            </div>
             <div class="selectSub">
-              <button type="button" class="am-btn am-btn-danger" ng-click="check()">统计</button>
+              <button type="button" class="am-btn am-btn-danger" ng-click="check()">查询</button>
             </div>
 
         </div>
@@ -292,23 +273,15 @@
                   <thead>
                     <tr class="success">
                       <th class="text-center" style="width:10%">编号</th>
-                      <th>照片</th>
-                      <th>年龄</th>
-                      <th>性别</th>
-                      <th>时间</th>
-                      <th>顾客名字</th>
-                      <th>顾客类别</th>
+                      <th>摄像头编号</th>
+                      <th>报警时间</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="(xindex,x) in userList">
                       <td>{{xindex+1}}</td>
-                      <td><img ng-src="{{x.src}}" alt=""></td>
-                      <td>{{x.age}}</td>
-                      <td><span ng-if="x.sex==1">男</span><span ng-if="x.sex==2">女</span><span ng-if="!x.sex">未知</span></td>
                       <td>{{x.time}}</td>
-                      <td><span ng-if="x.topName.length==0">未知</span><span ng-if="x.topName">{{x.topName}}</span></td>
-                      <td><span ng-if="x.LibID==0">普通顾客</span><span ng-if="x.LibID==1">熟客</span><span ng-if="x.LibID==2" style="color:red">VIP</span><span ng-if="x.LibID==3">黑名单</span><span  ng-if="x.LibID>3">未知</span></td>
+                      <td>{{x.time}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -356,7 +329,7 @@
 
 <!--[if (gte IE 9)|!(IE)]><!--> 
 <script src="assets/js/amazeui.min.js"></script>
-<script src="js/detail.js"></script>
+<script src="js/warn.js"></script>
 <!--<![endif]-->
 <script>
 $(function(){
@@ -365,9 +338,6 @@ console.info(window.scrollY);
 } 
 
 })
-     
-
-
 </script>
 
 
