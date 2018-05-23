@@ -294,7 +294,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   }
   $scope.jump = function(){
     $('#modal2').modal();
-      $scope.pos = $scope.enterPage*10-1;
+      $scope.pos = $scope.enterPage*10;
     $http.get('/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
       if($scope.enterPage==$scope.totalPage){
