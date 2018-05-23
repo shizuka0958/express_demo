@@ -54,7 +54,7 @@ app.get('/getPersonTimes', function (req, res) {
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
-    var sqlStr = 'select CamID,count(*) as count from ht_result where ';
+    var sqlStr = 'select SQL_NO_CACHE CamID,count(*) as count from ht_result where ';
 
     if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
         sqlStr = sqlStr + 'CamID =' + "'" + req.query.camID + "'" + ' and ';
@@ -92,7 +92,7 @@ app.get('/getPersonTimes', function (req, res) {
     console.log(sqlStr);
 
     var p1 = new Promise(function (resolve, reject) {
-        pool.query('select CamID from ht_result group by CamID', function (error, results, fields) {
+        pool.query('select SQL_NO_CACHE CamID from ht_result group by CamID', function (error, results, fields) {
             if (error) {
                 reject(error);
             }
@@ -182,8 +182,8 @@ app.get('/getDetailData', function (req, res) {
     res.set('Content-Type', 'application/json');
     console.log(JSON.stringify(req.query));
 
-    var sqlStr = 'select CamID,Pic,Sex,Age,time,TopID,TopName from ht_result where ';
-    var sqlStr_count = 'select count(*) as count from ht_result where '
+    var sqlStr = 'select SQL_NO_CACHE CamID,Pic,Sex,Age,time,TopID,TopName,LibID from ht_result where ';
+    var sqlStr_count = 'select SQL_NO_CACHE count(*) as count from ht_result where '
 
     var sqlStrFilter = '';
     if (req.query.hasOwnProperty('camID') && ('' != req.query.camID)) {
@@ -284,7 +284,7 @@ app.get('/getDetailData', function (req, res) {
                 data.list = list;
                 data.totalCount = value;
                 res_obj.data = data;
-
+                console.log(data.list.length);
                 res.send(res_obj);
             }
         });
@@ -301,7 +301,7 @@ app.get('/getCameraList', function (req, res) {
     console.log('[request]: /getCameraList');
     res.set('Content-Type', 'application/json');
 
-    var sqlStr = 'select CamID from ht_result group by CamID';
+    var sqlStr = 'select SQL_NO_CACHE CamID from ht_result group by CamID';
 
     //var connection = db.createConnection('test');
     pool.query(sqlStr, function (error, results, fields) {
