@@ -211,6 +211,7 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
    $scope.getCameraList()
   // 查询
 	$scope.check = function(){
+    $('#myPage').val('');
     $('.pagination').addClass('hide')
     $scope.pos=0;
     $scope.page = 1;
@@ -294,13 +295,19 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
   }
   $scope.jump = function(){
     $('#modal2').modal();
-      $scope.pos = $scope.enterPage*10;
+      $scope.pos = ($scope.enterPage-1)*10;
     $http.get('/getDetailData?camID='+camID+'&sex='+sex+'&startTime='+time4+'&endTime='+time5+'&startAge='+age1+'&endAge='+age2+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
       if($scope.enterPage==$scope.totalPage){
           $('.next').attr('disabled',true)
+          $('.prev').attr('disabled',false)
         }else if($scope.enterPage==1){
           $('.prev').attr('disabled',true)
+        }else if($scope.enterPage>1){
+          $('.prev').attr('disabled',false)
+        }
+        if($scope.enterPage<$scope.totalPage){
+          $('.next').attr('disabled',false)
         }
       $scope.userList = res.data.list
       $scope.page=$scope.enterPage

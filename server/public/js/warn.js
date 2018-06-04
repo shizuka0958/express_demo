@@ -183,12 +183,12 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     $scope.page = 1;
     $('#modal2').modal();
     $scope.userList=''
-		$http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+		$http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
 			console.log(res)
       $scope.userList = res.data.list
       $scope.totalCount = res.data.totalCount;
-      $scope.totalPage = Math.ceil($scope.totalCount/10)
-      if($scope.totalCount>10){
+      $scope.totalPage = Math.ceil($scope.totalCount/20)
+      if($scope.totalCount>20){
         $('.pagination').removeClass('hide')
         $('.next').attr('disabled',false)
         $('.prev').attr('disabled',true)
@@ -209,8 +209,8 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     $('.next').attr('disabled',false)
     $('#modal2').modal();
     if($scope.pos>1){
-      $scope.pos-=10;
-      $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+      $scope.pos-=20;
+      $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page--;
@@ -230,8 +230,8 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     $('.prev').attr('disabled',false)
     $('#modal2').modal();
     if($scope.pos<$scope.totalCount){
-      $scope.pos+=10;
-    $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
+      $scope.pos+=20;
+    $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page++
@@ -246,5 +246,44 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     })
   }
 
+  }
+  selectPage = function(){
+    $scope.enterPage=parseInt($('#myPage').val());
+
+    var tt = /^\d+$/g;
+    if(!tt.test($scope.enterPage) || $scope.enterPage<=0){
+        $('#jump').attr('disabled',true)
+    }else if($scope.enterPage>$scope.totalPage){
+      $scope.enterPage = $scope.totalPage
+      $('#myPage').val($scope.totalPage)
+      $('#jump').attr('disabled',false)
+    }else{
+      $('#jump').attr('disabled',false)
+    }
+  }
+  $scope.jump = function(){
+    $('#modal2').modal();
+      $scope.pos = ($scope.enterPage-1)*20;
+    $http.get('/getHumanoidData?camID='+camID+'&startTime='+time4+'&endTime='+time5+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
+      console.log(res)
+      if($scope.enterPage==$scope.totalPage){
+          $('.next').attr('disabled',true)
+          $('.prev').attr('disabled',false)
+        }else if($scope.enterPage==1){
+          $('.prev').attr('disabled',true)
+        }else if($scope.enterPage>1){
+          $('.prev').attr('disabled',false)
+        }
+        if($scope.enterPage<$scope.totalPage){
+          $('.next').attr('disabled',false)
+        }
+      $scope.userList = res.data.list
+      $scope.page=$scope.enterPage
+      setTimeout(function(){
+        $('#modal2').modal('close')
+      },200)
+    }).error(function(res){
+      console.log(res)
+    })
   }
 }])
