@@ -143,6 +143,31 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     }
   
   }
+  // 摄像机选择1
+  camSelect1 = function(event){
+    if($(event.target).val()!=0){
+      $scope.setCamID = $(event.target).val()
+    }else{
+      $scope.setCamID=''
+    }
+  }
+  $scope.setTime = function(){
+    var s = $('#startT').val()
+    var e = $('#endT').val()
+    var temp = s+'-'+e
+    if(!$scope.setCamID){
+      alert('请选择摄像头')
+    }else{
+      $.get('http://115.29.237.230:7056/upBfTime.ashx?id='+$scope.setCamID+'&time='+temp,function(res){
+        console.log(res)
+        if(res.status=="True"){
+          alert("设置成功")
+        }else{
+          alert(res.status)
+        }
+      },'json')
+    }
+  }
 // 时间段选择
   chooseDate = function(event){
     // $('.selectSub button').attr('disabled',false)

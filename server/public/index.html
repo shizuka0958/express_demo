@@ -132,13 +132,26 @@
             <td>{{timeSelectList[xindex].count}}</td>
             <td>{{sexList[xindex].count}}</td>
             <td>{{ageList[xindex].count}}</td>
-            <td><a href="details.html?id={{x}}">点击查看详情</a></td>
+            <td><a href="details.html?id={{x}}" style="text-decoration:underline">详情</a>&nbsp;&nbsp;&nbsp;<a href="" style="text-decoration:underline" data-am-modal="{target: '#my-popup'}" ng-click="showData(x)">统计数据</a></td>
           </tr>
         </tbody>
       </table>
     </div>
 </div>
 </div>
+  <div class="am-popup" id="my-popup">
+    <div class="am-popup-inner">
+      <div class="am-popup-hd" style="background:#f8f8f8;border:none">
+        <span data-am-modal-close
+              class="am-close">&times;</span>
+      </div>
+      <div class="am-popup-bd" style="overflow:hidden !important">
+          <div style="padding-bottom:10px"><span style="float:left">日期选择：</span><input type="text" class="am-form-field" id="myDay" placeholder="{{time3}}" data-am-datepicker="{}" readonly style="text-align:center;width:80%" onchange="selectDay()"/></div>
+          <div id="container1" style="width:600px;height:230px"></div>
+          <div id="container" style="width:600px;height:290px"></div>
+      </div>
+    </div>
+  </div>
 <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="modal2">
   <div class="am-modal-dialog">
     <div class="am-modal-hd">正在载入...</div>
@@ -147,6 +160,15 @@
     </div>
   </div>
 </div>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+     <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
 </div>
 
 <!--[if lt IE 9]>

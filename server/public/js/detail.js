@@ -318,4 +318,42 @@ app.controller('detailController',['$scope','$http',function($scope,$http){
       console.log(res)
     })
   }
+ 
+  $scope.checkHis = function(cam,top,src){
+    $scope.imgArr = new Array();
+    $scope.hisList='';
+    if(top>0){
+      $http.get('/getPersonHistoryData?camID='+cam+'&topID='+top).success(function(res){
+        $scope.hisList = res.data.list;
+        for (index in $scope.hisList){
+          $http.get('/getPicByPath?path='+$scope.hisList[index].pic).success(function(res){
+            $scope.imgArr.push(res.src)
+            console.log($scope.imgArr)
+          }) 
+        }
+        setTimeout(function(){console.log($scope.imgArr)},1000)
+      })
+    }else{
+        var temp ={
+          "picPath":src,
+          "threshold":0.75,
+          "topn":100,
+          "camIds":cam
+        }
+        var data=JSON.stringify(temp)
+        $.post("http://127.0.0.1:18008/passer/comparen", 
+          data,
+        function(res){
+         $scope.hisList = res.persons;
+         $scope.$apply();
+
+         for (index in res.persons){
+          $http.get('/getPicByPath?path='+res.persons[index].pic_path).success(function(res){
+            $scope.imgArr.push(res.src)
+          })
+         }
+        })
+    }
+            
+  }
 }])

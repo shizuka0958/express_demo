@@ -7,6 +7,7 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
   var date = new Date();
   var y = date.getFullYear();
   var m = date.getMonth() + 1;
+  var dd = date.getDate()-1;
   m = m < 10 ? ('0' + m) : m;
   var m1 = m-1+2;
   if(m1 > 12){
@@ -32,6 +33,8 @@ app.controller('indexController',['$scope','$http',function($scope,$http){
   var time2 = y + '-' + m1 + '-' + d+' '+h+':'+minute;
   var timeEnd = y + '-' + m1 + '-' + d+' '+h+':'+minute1;
   var time3 = y + '-' + m + '-' + d;
+  var time4 = y + '-' + m + '-' + dd;
+  $scope.time3 = time4;
 
    setInterval(function(){
   	  date = new Date();
@@ -250,4 +253,151 @@ $scope.timeSelect(1);
 		})
 	}
 	$scope.times()
+
+  $scope.showData = function(id){
+    $('#myDay').datepicker('setValue', $scope.time3)
+    $scope.dataCamId = id
+    $scope.ageData($scope.time3);
+    $scope.timeData($scope.time3);
+  }
+
+   $('#myDay').datepicker().
+      on('changeDate.datepicker.amui',function(event){
+        var mm = (event.date.getMonth()-1+2) < 10 ? ('0' + (event.date.getMonth()-1+2)) : (event.date.getMonth()-1+2);
+        var dd = event.date.getDate() < 10 ? ('0' + event.date.getDate()) : event.date.getDate();
+        var day = event.date.getFullYear()+'-'+mm+'-'+dd;
+        $scope.ageData(day);
+        $scope.timeData(day);
+      })
+  $scope.ageData = function(date){
+       var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        $http.get('/getAgeGroupCount?camID='+$scope.dataCamId+'&date='+date).success(function(res){
+          var res = res.data.list;
+          console.log(res)
+          var data = new Array();
+          for(index in res){
+            if(index==0&&res[0]!=null){
+              data.push({value:res[0],name:"<20"})
+            }else if(index==1&&res[1]!=null){
+              data.push({value:res[1],name:"20-30"})
+            }else if(index==2&&res[2]!=null){
+              data.push({value:res[2],name:"30-40"})
+            }else if(index==3&&res[3]!=null){
+              data.push({value:res[3],name:"40-50"})
+            }else if(index==4&&res[4]!=null){
+              data.push({value:res[4],name:">50"})
+            }
+          }
+          console.log(data);
+                  
+          option = {
+            title: {
+                text: '每日年龄段分布',
+                left: 'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                // orient: 'vertical',
+                // top: 'middle',
+                bottom: 10,
+                left: 'center',
+                // data: ['西凉', '益州','兖州','荆州','幽州']
+            },
+            series : [
+                {
+                    name: '年龄段',
+                    type: 'pie',
+                    radius : '65%',
+                    center: ['50%', '50%'],
+                    selectedMode: 'single',
+                    data:data,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+        })
+
+
+  }
+  $scope.timeData = function(date){
+        var dom = document.getElementById("container1");
+        var myChart = echarts.init(dom);
+        var app = {};
+        var data = new Array();
+        option = null;
+        $http.get('/getHourCount?camID='+$scope.dataCamId+'&date='+date).success(function(res){
+          var res = res.data.list;
+          console.log(res)
+          var data = new Array();
+          for(index in res){
+            if(res[index].hour<10){
+              data.push(["0"+res[index].hour+":00",res[index].count])
+            }else{
+              data.push([res[index].hour+":00",res[index].count])
+            }
+          }
+          console.log(data)
+           // data = [["00:00",116],["01:00",129],["02:00",135],["03:00",86],["04:00",73],["05:00",85],["06:00",73],["07:00",68],["08:00",92],["09:00",130],["10:00",245],["11:00",139],["12:00",115],["13:00",111],["14:00",309],["15:00",206],["16:00",137],["17:00",128],["18:00",85],["19:00",94],["20:00",71],["21:00",106],["22:00",84],["23:00",0],["24:00",0]];
+        var dateList = data.map(function (item) {
+            return item[0];
+        });
+        var valueList = data.map(function (item) {
+            return item[1];
+        });
+
+        option = {
+            visualMap: [{
+                show: false,
+                type: 'continuous',
+                seriesIndex: 0,
+                min: 0,
+                max: 400
+            }],
+
+
+            title: [{
+                left: 'center',
+                text: '每日客流分布'
+            }],
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: [{
+                data: dateList
+            }],
+            yAxis: [{
+                splitLine: {show: false}
+            }],
+            grid: [{
+                top: '20%'
+            },{
+              bottom: '20%'
+            }],
+            series: [{
+                type: 'line',
+                showSymbol: false,
+                data: valueList
+            }]
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+        })
+       
+  }
 }])

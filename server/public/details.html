@@ -148,6 +148,10 @@
           margin: 0 auto;
           width: 80%
         }
+        .tdImg img{
+          width: 60px !important;
+          height: 80px !important;
+        } 
 </style>
 </head>
 <body ng-controller="detailController" ng-cloak>
@@ -299,6 +303,7 @@
                       <th>时间</th>
                       <th>顾客名字</th>
                       <th>顾客类别</th>
+                      <th>历史记录</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -310,6 +315,7 @@
                       <td>{{x.time}}</td>
                       <td><span ng-if="x.topName.length==0">未知</span><span ng-if="x.topName">{{x.topName}}</span></td>
                       <td><span ng-if="x.LibID==0">普通顾客</span><span ng-if="x.LibID==1">熟客</span><span ng-if="x.LibID==2" style="color:red">VIP</span><span ng-if="x.LibID==3">黑名单</span><span  ng-if="x.LibID>3">未知</span></td>
+                      <td><a href="#" ng-click="checkHis(x.camID,x.topID,x.pic)" data-am-modal="{target: '#my-popup'}">查看历史</a></td>
                     </tr>
                   </tbody>
                 </table>
@@ -344,6 +350,35 @@
     <div class="am-modal-hd">正在载入...</div>
     <div class="am-modal-bd">
       <span class="am-icon-spinner am-icon-spin"></span>
+    </div>
+  </div>
+</div>
+<div class="am-popup" id="my-popup" style="background:#f8f8f8">
+  <div class="am-popup-inner">
+    <div class="am-popup-hd">
+      <h4 class="am-popup-title">历史记录</h4>
+      <span data-am-modal-close
+            class="am-close">&times;</span>
+    </div>
+    <div class="am-popup-bd">
+      <table class="am-table am-table-bordered table1">
+        <thead>
+          <tr class="">
+            <th style="text-align:center;width:15%">序号</th>
+            <th style="text-align:center;width:15%">摄像头</th>
+            <th style="text-align:center">照片</th>
+            <th style="text-align:center">进店时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(xindex,x) in hisList">
+            <td style="text-align:center;width:15%">{{xindex+1}}</td>
+            <td style="text-align:center;width:15%">{{x.cam_id}}</td>
+            <td style="text-align:center" class="tdImg"><img ng-src="{{imgArr[xindex]}}" alt=""></td>
+            <td style="text-align:center">{{x.time}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
