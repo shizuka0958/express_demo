@@ -96,10 +96,11 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     // $('.pagination').addClass('hide')
     // $scope.pos=0;
     // $scope.page = 1;
-    $http.get('/getPersonList?lib_id=1&limitStartPos=1&limitNumber=100').success(function(res){
+    $http.get('/getPersonList?lib_id=1&limitStartPos=1&limitNumber=1000').success(function(res){
       $scope.totalCount = res.data.totalCount;
       // $scope.totalPage = Math.ceil($scope.totalCount/20)
       $scope.salesList = res.data.list
+      console.log(res.data.list);
       $scope.check($scope.salesList);
       // if($scope.totalCount>20){
       //   $('.pagination').removeClass('hide')
