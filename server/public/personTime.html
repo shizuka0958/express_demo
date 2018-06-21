@@ -1,0 +1,414 @@
+<!doctype html>
+<html class="no-js" ng-app="myApp">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>摄像头详情</title>
+<meta name="description" content="这是一个 index 页面">
+<meta name="keywords" content="index">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="icon" type="image/png" href="assets/i/favicon.png">
+<link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+<meta name="apple-mobile-web-app-title" content="Amaze UI" />
+<link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+<link rel="stylesheet" href="assets/css/detail.css">
+<link rel="stylesheet" href="assets/css/amazeui.datetimepicker.css"/>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/amazeui.datetimepicker.js"></script>
+<script src="js/angular.min.js"></script>
+<style>
+          body{
+            min-width: 1200px !important
+          }
+          .main{
+            width: 97%;
+            margin: 0 auto;
+            height: auto;
+            border: 1px solid #ccc;
+            background: #eee;
+            min-height: 700px;
+            padding-bottom: 10px
+        }
+        .leftNav{
+            width: 20%;
+            height: 100%;
+            float: left;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .l1{
+            width: 90%;
+            border-radius: 5px;
+            margin-left: 5%;
+            margin-top: 30px;
+        }
+        .rightCon{
+            height: 100%;
+            width: 80%;
+            margin-left: 20%;
+        }
+        .profile{
+            width: 140px;
+            height:165px;
+            margin: 10px;
+            margin-top: 5px;
+            float: left;
+        }
+        .profile img{
+            width: 100%;
+            height: 100%
+        }
+        .total{
+            width: 100%;
+            height: 100%;
+            /* border: 1px solid black; */
+        }
+        .totalInfos{
+            height: 70%;
+            width: 100%;
+            /* border: 1px solid black; */
+        }
+        .totalInfos button{
+            font-size: 15px;
+            margin-left: 5px;
+            margin-top: 5px;
+        }
+        .r1{
+            margin-top: 10px;
+        }
+        .hide{
+            display: none
+        }
+        .table{
+            text-align: center;
+            vertical-align: middle;
+            margin-bottom: 0px;
+        }
+        .table tr th{
+            text-align: center;
+            vertical-align: middle
+        }
+        .table1 tbody tr td:nth-child(2){
+            width: 30%
+        }
+        .table1 tbody tr td:nth-child(2) img{
+            width: 60px;
+            height: 75px;
+        }
+        .pagination{
+            width: 600px;
+            margin: 0 auto;
+            margin-top: 5px;
+            margin-left: 25%;
+            padding-bottom: 20px;
+            height: 50px;
+            line-height: 50px;
+        }
+        .pagination span{
+            height: 50px;
+            line-height: 50px;
+        }
+        .pagination button{
+            margin-left: 20px
+        }
+        .topTopic{
+          height: 30px;
+          width: 100%;
+          background: #ddd;
+          font-weight: bolder;
+          line-height: 30px
+        }
+        .selectDate{
+          margin-top: 30px
+        }
+        .selectSex{
+          margin-top: 20px;
+        }
+        .selectAge{
+          margin-top: 30px;
+        }
+        .selectSex .am-selected-btn, .selectAge .am-selected-btn, .selectDate .am-selected-btn{
+          width: 150px;
+        }
+        .selectTime{
+          margin-top: 10px;
+        }
+        .selectTime input{
+          cursor: pointer !important
+        }
+        .selectSub{
+          width: 100%;
+          margin-top: 30px;
+          text-align: center
+        }
+        .selectSub button{
+          margin: 0 auto;
+          width: 80%
+        }
+        .tdImg img{
+          width: 60px !important;
+          height: 80px !important;
+        } 
+</style>
+</head>
+<body ng-controller="detailController" ng-cloak>
+<!--[if lte IE 9]><p class="browsehappy">升级你的浏览器吧！ <a href="http://se.360.cn/" target="_blank">升级浏览器</a>以获得更好的体验！</p><![endif]-->
+</head>
+
+<body>
+<header class="am-topbar admin-header">
+  <div class="am-topbar-brand"><img src="assets/i/logo.png"></div>
+  <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+  </div>
+</header>
+
+<div class="am-cf admin-main"> 
+
+<div class="nav-navicon admin-main admin-sidebar">
+    
+    
+    <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎系统管理员</div>
+    <div class="sideMenu">
+      <div class="sideMenu">
+      <h3 class="am-icon-flag"><em></em> <a href="index.html">摄像头列表</a></h3>
+      <ul>
+        <li><a href="details.html">&ensp;摄像头详情</a></li>
+        <li><a href="warn.html">&ensp;报警详情</a></li>
+        <li><a href="addType.html">&ensp;类别库管理</a></li>
+        <li><a href="addPeople.html">&ensp;添加人员</a></li>
+        <li><a href="addPeople.html"  style="color:white">&ensp;人次统计</a></li>
+      </ul>
+    </div>
+    </div>
+    <script type="text/javascript">
+			jQuery(".sideMenu").slide({
+				titCell:"h3", //鼠标触发对象
+				targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
+				effect:"slideDown", //targetCell下拉效果
+				delayTime:300 , //效果时间
+				triggerTime:150, //鼠标延迟触发时间（默认150）
+				defaultPlay:true,//默认是否执行效果（默认true）
+				returnDefault:true //鼠标从.sideMen移走后返回默认状态（默认false）
+				});
+		</script> 
+</div>
+
+<div class=" admin-content">
+<div class="admin">
+<!--    <div class="admin-index">
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 100}">
+        <dt class="qs"><i class="am-icon-users"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 300}">
+        <dt class="cs"><i class="am-icon-area-chart"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 600}">
+        <dt class="hs"><i class="am-icon-shopping-cart"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 900}">
+        <dt class="ls"><i class="am-icon-cny"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 900}">
+        <dt class="ls"><i class="am-icon-cny"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 900}">
+        <dt class="ls"><i class="am-icon-cny"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+      <dl data-am-scrollspy="{animation: 'slide-right', delay: 900}">
+        <dt class="ls"><i class="am-icon-cny"></i></dt>
+        <dd>455</dd>
+        <dd class="f12">总人数</dd>
+      </dl>
+
+    </div> -->
+    <div class="admin-biaoge">
+      <div class="xinxitj">详细信息</div>
+          <div class="main">
+          <div class="topTopic">
+            <div style="padding-left:10px;float:left;width:20%;border-right:1px solid #eee">
+              查询条件
+            </div>
+            <div style="width:98%;height:100%">
+              &ensp;统计结果
+              <div style="float:right">共计 {{totalCount}} 条结果</div>
+            </div>
+          </div>
+        <div class="leftNav">
+        <!--     <div class="selectDate">
+              <span>日期选择</span>
+              <div class="am-input-group am-datepicker-date picker" data-am-datepicker="{format: 'yyyy-mm-dd', viewMode: 'years'}" style="padding-bottom:15px"  >
+                <input type="text" class="am-form-field" readonly id="chooseDate" value="" placeholder="请选择日期" />
+                <span class="am-input-group-btn am-datepicker-add-on">
+                  <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span></button>
+                </span>
+              </div>
+            </div> -->
+            <div class="selectDate">
+              <span>摄像头选择:</span>
+              <select id="cam" onchange="camSelect(event)">
+                <option value="0">摄像头选择</option>
+              </select>
+            </div>
+              <div class="selectTime">
+              <div>开始时间: <br><input type="text" id="datetimepicker1" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
+              <div>结束时间: <br><input type="text" id="datetimepicker2" class="am-form-field" style="width:100%;display:inline-block" readonly onchange="chooseDate(event)"></div>
+            </div>
+           <div class="selectSex">
+              <span>性别选择<br></span>
+              <select data-am-selected onchange="sexSelect(event)">
+                <option value="0">性别选择</option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+              </select>
+            </div>
+            <div class="selectAge">
+              <span>年龄选择<br></span>
+              <select data-am-selected onchange="ageSelect(event)">
+                <option value="0">年龄段选择</option>
+                <option value="20"> <20 </option>
+                <option value="20,30"> 20-30 </option>
+                <option value="30,40"> 30-40 </option>
+                <option value="40,50"> 40-50 </option>
+                <option value="50"> >50 </option>
+              </select>
+            </div>
+            <div class="selectSub">
+              <button type="button" class="am-btn am-btn-danger" ng-click="check()">统计</button>
+            </div>
+
+        </div>
+        <div class="rightCon">
+            <div class="btnCon">
+               <table class="am-table am-table-bordered table1">
+                  <thead>
+                    <tr class="success">
+                      <th class="text-center" style="width:10%">编号</th>
+                      <th>照片</th>
+                      <th>年龄</th>
+                      <th>性别</th>
+                      <th>时间</th>
+                      <th>顾客名字</th>
+                      <th>顾客类别</th>
+                      <th>历史记录</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{xindex+1}}</td>
+                      <td><img ng-src="{{x.src}}" alt=""></td>
+                      <td>{{x.age}}</td>
+                      <td><span ng-if="x.sex==1">男</span><span ng-if="x.sex==2">女</span><span ng-if="!x.sex">未知</span></td>
+                      <td>{{x.time}}</td>
+                      <td><span ng-if="x.topName.length==0">未知</span><span ng-if="x.topName">{{x.topName}}</span></td>
+                      <td><span ng-if="x.LibID==0">普通顾客</span><span ng-if="x.LibID==1">熟客</span><span ng-if="x.LibID==2" style="color:red">VIP</span><span ng-if="x.LibID==3">黑名单</span><span  ng-if="x.LibID>3">未知</span></td>
+                      <td><a href="#" ng-click="checkHis(x.camID,x.topID,x.pic)" data-am-modal="{target: '#my-popup'}">查看历史</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+                  <div class="pagination hide">
+                    <button class="am-btn am-btn-primary b1 prev" ng-click="prev()" disabled="true">上一页</button>
+                    <span style="padding-left:20px;font-size:20px">{{page}}/{{totalPage}}</span>
+                    <button class="am-btn am-btn-primary b1 next" ng-click="next()">下一页</button>
+                    <input type="number" min="1" class="am-form-field" style="width:80px;display:inline-block;margin-left:10px" placeholder="{{totalPage}}" id="myPage" onkeyup="selectPage()">
+                    <button class="am-btn am-btn-primary" style="margin-left:-5px" ng-click="jump()" id="jump" disabled="true">跳转到</button>
+                  </div>
+            </div>
+        </div>
+       
+    </div>
+    </div>
+
+
+</div>
+</div>
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="modal1">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">该时间暂无人脸数据
+      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+    </div>
+    <div class="am-modal-bd">
+      暂无数据
+    </div>
+  </div>
+</div>
+<div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="modal2">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">正在载入...</div>
+    <div class="am-modal-bd">
+      <span class="am-icon-spinner am-icon-spin"></span>
+    </div>
+  </div>
+</div>
+<div class="am-popup" id="my-popup" style="background:#f8f8f8">
+  <div class="am-popup-inner">
+    <div class="am-popup-hd">
+      <h4 class="am-popup-title">历史记录</h4>
+      <span data-am-modal-close
+            class="am-close">&times;</span>
+    </div>
+    <div class="am-popup-bd">
+      <table class="am-table am-table-bordered table1">
+        <thead>
+          <tr class="">
+            <th style="text-align:center;width:15%">序号</th>
+            <th style="text-align:center;width:15%">摄像头</th>
+            <th style="text-align:center">照片</th>
+            <th style="text-align:center">进店时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(xindex,x) in hisList">
+            <td style="text-align:center;width:15%">{{xindex+1}}</td>
+            <td style="text-align:center;width:15%">{{x.cam_id}}</td>
+            <td style="text-align:center" class="tdImg"><img ng-src="{{imgArr[xindex]}}" alt=""></td>
+            <td style="text-align:center">{{x.time}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/polyfill/rem.min.js"></script>
+<script src="assets/js/polyfill/respond.min.js"></script>
+<script src="assets/js/amazeui.legacy.js"></script>
+<![endif]--> 
+
+<!--[if (gte IE 9)|!(IE)]><!--> 
+<script src="assets/js/amazeui.min.js"></script>
+<script src="js/personTime.js"></script>
+<!--<![endif]-->
+<script>
+$(function(){
+     $('.rightCon').scroll = function() { 
+console.info(window.scrollY); 
+} 
+
+})
+     
+
+
+</script>
+
+
+</body>
+</html>
