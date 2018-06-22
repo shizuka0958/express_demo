@@ -238,7 +238,7 @@
 
     </div> -->
     <div class="admin-biaoge">
-      <div class="xinxitj">详细信息</div>
+      <div class="xinxitj">销售员接待量统计</div>
           <div class="main">
           <div class="topTopic">
             <div style="padding-left:10px;float:left;width:20%;border-right:1px solid #eee">
@@ -261,7 +261,7 @@
             </div> -->
               <div class="selectTime" style="margin-top:30px">
               <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
-                <input type="text" class="am-form-field" placeholder="日期选择" readonly id="chooseDate">
+                <input type="text" class="am-form-field" placeholder="{{date}}" readonly id="chooseDate">
                 <span class="am-input-group-btn am-datepicker-add-on">
                   <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
                 </span>
@@ -279,17 +279,16 @@
                     <tr class="success">
                       <th class="text-center" style="width:10%">序号</th>
                       <th>销售员编号</th>
-                      <th>销售员照片</th>
                       <th>销售员姓名</th>
 					            <th>接待客户数量</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="(xindex,x) in userList">
+                    <tr ng-repeat="(xindex,x) in salesList">
                       <td>{{xindex+1}}</td>
-                      <td><img ng-src="{{x.}}" alt=""></td>
-                      <td>{{x.time}}</td>
-					            <td></td>
+                      <td>{{x.person_id}}</td>
+                      <td>{{x.name}}</td>
+					            <td>{{x.count}}</td>
                     </tr>
                   </tbody>
                 </table>

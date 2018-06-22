@@ -159,8 +159,6 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     $scope.address = $('#address').val();
     if(!$scope.libId1){
       alert("请选择人员库")
-    }else if($scope.libId1==1){
-      alert('10W库暂时不可用')
     }else if(!$scope.gender&&$scope.gender!=0){
       alert("请选择性别")
     }else if($('#name').val().length==0){

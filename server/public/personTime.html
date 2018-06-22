@@ -91,13 +91,6 @@
             text-align: center;
             vertical-align: middle
         }
-        .table1 tbody tr td:nth-child(2){
-            width: 30%
-        }
-        .table1 tbody tr td:nth-child(2) img{
-            width: 60px;
-            height: 75px;
-        }
         .pagination{
             width: 600px;
             margin: 0 auto;
@@ -238,7 +231,7 @@
 
     </div> -->
     <div class="admin-biaoge">
-      <div class="xinxitj">详细信息</div>
+      <div class="xinxitj">出入店统计</div>
           <div class="main">
           <div class="topTopic">
             <div style="padding-left:10px;float:left;width:20%;border-right:1px solid #eee">
@@ -246,7 +239,7 @@
             </div>
             <div style="width:98%;height:100%">
               &ensp;统计结果
-              <div style="float:right">共计 {{totalCount}} 条结果</div>
+              <div style="float:right;color:red">当日客流总数： {{totalCount}} </div>
             </div>
           </div>
         <div class="leftNav">
@@ -261,7 +254,7 @@
             </div> -->
               <div class="selectTime" style="margin-top:30px">
               <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd'}">
-                <input type="text" class="am-form-field" placeholder="日期选择" readonly id="chooseDate">
+                <input type="text" class="am-form-field" placeholder="{{date}}" readonly id="chooseDate">
                 <span class="am-input-group-btn am-datepicker-add-on">
                   <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span> </button>
                 </span>
@@ -278,10 +271,11 @@
                   <thead>
                     <tr class="success">
                       <th class="text-center" style="width:10%">序号</th>
-                      <th>进店时间</th>
-                      <th>进店照片</th>
-                      <th>出店时间</th>
-                      <th>出店照片</th>
+                      <th>照片</th>
+                      <!-- <th style="width: 10%">进店照片</th> -->
+                      <th style="width: 20%">进店时间</th>
+                      
+                      <th style="width: 20%">出店时间</th>
                       <th>顾客类别</th>
                       <th>顾客姓名</th>
                     </tr>
@@ -289,9 +283,13 @@
                   <tbody>
                     <tr ng-repeat="(xindex,x) in userList">
                       <td>{{xindex+1}}</td>
-                      <td><img ng-src="{{x.}}" alt=""></td>
+                      <td><img ng-src="{{x.src}}" alt=""></td>
+                      <!-- <td><img ng-src="{{x.entersrc}}" alt=""></td> -->
+                      <td>{{x.entertime}}</td>
+                      
                       <td>{{x.time}}</td>
-                      <td></td>
+                      <td><span ng-if='x.LibID==0'>普通顾客</span><span ng-if='x.LibID==1'>销售</span><span ng-if='x.LibID==2'>测试库</span></td>
+                      <td><span ng-if='x.topID>0'>{{x.topName}}</span><span ng-if='x.topID==0'>未知</span></td>
                     </tr>
                   </tbody>
                 </table>

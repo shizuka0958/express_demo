@@ -179,6 +179,8 @@
         <li><a href="warn.html">&ensp;报警详情</a></li>
         <li><a href="addType.html">&ensp;类别库管理</a></li>
         <li><a href="addPeople.html">&ensp;添加人员</a></li>
+        <li><a href="personTime.html">&ensp;客流统计</a></li>
+        <li><a href="salesDetail.html">&ensp;销售员信息</a></li>
       </ul>
     </div>
     </div>
@@ -314,7 +316,7 @@
                       <td><span ng-if="x.sex==1">男</span><span ng-if="x.sex==2">女</span><span ng-if="!x.sex">未知</span></td>
                       <td>{{x.time}}</td>
                       <td><span ng-if="x.topName.length==0">未知</span><span ng-if="x.topName">{{x.topName}}</span></td>
-                      <td><span ng-if="x.LibID==0">普通顾客</span><span ng-if="x.LibID==1">熟客</span><span ng-if="x.LibID==2" style="color:red">VIP</span><span ng-if="x.LibID==3">黑名单</span><span  ng-if="x.LibID>3">未知</span></td>
+                      <td><span ng-if="x.LibID==0">普通顾客</span><span ng-if="x.LibID==1">销售库</span><span ng-if="x.LibID==2">测试库</span><span  ng-if="x.LibID>3">未知</span></td>
                       <td><a href="#" ng-click="checkHis(x.camID,x.topID,x.pic)" data-am-modal="{target: '#my-popup'}">查看历史</a></td>
                     </tr>
                   </tbody>

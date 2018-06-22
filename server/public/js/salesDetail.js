@@ -96,12 +96,12 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     // $('.pagination').addClass('hide')
     // $scope.pos=0;
     // $scope.page = 1;
-    $http.get('/getPersonList?lib_id=1&limitStartPos=1&limitNumber=1000').success(function(res){
+    $http.get('/getPersonList?lib_id=1&limitStartPos=0&limitNumber=1000').success(function(res){
       $scope.totalCount = res.data.totalCount;
       // $scope.totalPage = Math.ceil($scope.totalCount/20)
       $scope.salesList = res.data.list
       console.log(res.data.list);
-      $scope.check($scope.salesList);
+      $scope.check();
       // if($scope.totalCount>20){
       //   $('.pagination').removeClass('hide')
       //   $('.next').attr('disabled',false)
@@ -118,15 +118,29 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
   }
    $scope.getCameraList()
   // 查询
-  $scope.userLists = [];
-	$scope.check = function(list){
-    for(index in list){
-      $http.get('/getSalesmanReception?topID='+list[index]+'&date='+$scope.date).success(function(res){
-        $scope.userLists.push(res.data)
+	$scope.check = function(){
+    $('#modal2').modal()
+    for(index in $scope.salesList){
+      $http.get('/getSalesmanReception?topID='+$scope.salesList[index].person_id+'&date='+$scope.date).success(function(res){
+        var findIndex = -1;
+        for(var i=0;i<$scope.salesList.length;i++){
+          if($scope.salesList[i].person_id == res.data.topID){
+            findIndex = i;
+          }
+        }
+
+        if(findIndex>=0){
+          $scope.salesList[findIndex].count = res.data.count;
+          $scope.$apply();
+        }
       })
+
     }
-    console.log($scope.userLists);
-            
+    setTimeout(function(){
+      $('#modal2').modal('close')
+    },500)
+    $scope.$apply()
+    console.log($scope.userLists);      
 	}
   $scope.check();
   // 上一页

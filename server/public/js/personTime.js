@@ -86,11 +86,7 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
  $('.am-datepicker-date').datepicker().
     on('changeDate.datepicker.amui', function(event) {
       var d = event.date;
-      $scope.date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
-      $scope.start = $scope.date+' 00:00'
-      $scope.end = $scope.date+' 23:59'
-      console.log($scope.start+','+$scope.end);
-              
+      $scope.date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()   
     });
 
  // 查询
@@ -98,20 +94,34 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     $('.pagination').addClass('hide')
     $scope.pos=0;
     $scope.page = 1;
-    // $('#modal2').modal();
+    $('#modal2').modal();
     $scope.userList=''
-    $http.get('/getDetailData?camID='+ 100 +'&sex='+sex+'&startTime='+$scope.start+'&endTime='+$scope.end+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
+    $scope.start = $scope.date+' 00:00'
+    $scope.end = $scope.date+' 23:59'
+    $http.get('/getDetailData?camID='+ 100 +'&startTime='+$scope.start+'&endTime='+$scope.end+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
+      
       $scope.userList = res.data.list
       $scope.totalCount = res.data.totalCount;
-      $scope.totalPage = Math.ceil($scope.totalCount/20)
-      if($scope.totalCount>20){
+      $scope.totalPage = Math.ceil($scope.totalCount/10)
+      if($scope.totalCount>10){
         $('.pagination').removeClass('hide')
         $('.next').attr('disabled',false)
         $('.prev').attr('disabled',true)
       }else if($scope.userList.length ==0){
         $('#modal1').modal();
+        setTimeout(function(){
+          $('#modal1').modal('close');
+        },1000)
       }
+      if($scope.userList.length!=0){
+        setTimeout(function(){
+          $('#modal2').modal('close')
+        },1000)
+      }
+
+      $scope.getTime();
+
       setTimeout(function(){
         $('#modal2').modal('close')
       },500)
@@ -121,16 +131,121 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     })
   }
   $scope.check();
+  $scope.getTime = function(){
+    for(index in $scope.userList){
+      if($scope.userList[index].topID==0){
+
+        var temp ={
+          "index":index-1+1,
+          "picPath":$scope.userList[index].pic,
+          "threshold":0.75,
+          "topn":100,
+          "camIds":1
+        }
+        var data=JSON.stringify(temp)
+        $.post("http://127.0.0.1:18008/passer/comparen", 
+          data,
+        function(res){
+         console.log(res.index);
+         var findIndex = -1;
+         for(var i=0;i<$scope.userList.length;i++){
+          if(i == res.index){
+            console.log("for i=",i);
+            findIndex = i;
+          }
+        }
+
+        if(findIndex >=0 && findIndex<10){
+          var outTime = $scope.userList[findIndex].time;
+          var outDate = new Date(outTime);
+          var inTime = "未知";
+          for(var j=0;j<res.persons.length;j++){
+            var inDate =  new Date(res.persons[j].time);
+            if(outDate.getTime()>inDate.getTime()){
+               if(outDate.getDate() == inDate.getDate()){
+                 inTime = res.persons[j].time;
+               }
+               else{
+                inTime = "未知";
+               }
+               break;
+            }else{
+              continue;
+            }
+          }
+          $scope.userList[findIndex].entertime = inTime;
+         // $scope.userList[findIndex].entertime = res.persons[0].time;
+          $scope.$apply();
+        }
+        
+      
+        
+
+        //  for (index in res.persons){
+        //   $http.get('/getPicByPath?path='+res.persons[index].pic_path).success(function(res){
+        //     $scope.imgArr.push(res.src)
+        //   })
+        //  }
+        })
+
+      }else{
+
+        $http.get('/getPersonHistoryData?camID=1'+'&index='+(index-1+1)+'&topID='+$scope.userList[index].topID).success(function(res){
+         // $scope.hisList = res.data.list;
+          // for (index in $scope.hisList){
+          //   $http.get('/getPicByPath?path='+$scope.hisList[index].pic).success(function(res){
+          //     $scope.imgArr.push(res.src)
+          //     console.log($scope.imgArr)
+          //   }) 
+          // }
+          console.log("getPersonHistoryData res=",res.data.resIndex)
+          var findIndex = -1;
+          for(var i=0;i<$scope.userList.length;i++){
+            if(i == res.data.resIndex){
+              console.log("getPersonHistoryData if i=",i);
+              findIndex = i;
+            }
+          }
+          console.log("findIndex = ",findIndex);
+          if(findIndex >=0 && findIndex<10){
+            var outTime = $scope.userList[findIndex].time;
+            var outDate = new Date(outTime);
+            var inTime = "未知"
+            for(var j=0;j<res.data.list.length;j++){
+              var inDate =  new Date(res.data.list[j].time);
+              if(outDate.getTime()>inDate.getTime()){
+                 if(outDate.getDate() == inDate.getDate()){
+                   inTime = res.data.list[j].time;
+                 }
+                 else{
+                  inTime = "未知";
+                 }
+                 break;
+              }else{
+                continue;
+              }
+            }
+            $scope.userList[findIndex].entertime = inTime;
+            //$scope.userList[findIndex].entertime = res.data.list[0].time;
+            $scope.$apply();    
+            console.log("findIndex = ",findIndex);
+          }
+            
+        })
+      }
+    }
+  }
   // 上一页
   $scope.prev = function(){
     $('.next').attr('disabled',false)
     $('#modal2').modal();
     if($scope.pos>1){
-      $scope.pos-=20;
-      $http.get('/getDetailData?camID='+ 100 +'&sex='+sex+'&startTime='+$scope.start+'&endTime='+$scope.end+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
+      $scope.pos-=10;
+      $http.get('/getDetailData?camID='+ 100 +'&startTime='+$scope.start+'&endTime='+$scope.end+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page--;
+      $scope.getTime();
       setTimeout(function(){
         $('#modal2').modal('close')
       },200)
@@ -147,11 +262,12 @@ app.controller('warnController',['$scope','$http',function($scope,$http){
     $('.prev').attr('disabled',false)
     $('#modal2').modal();
     if($scope.pos<$scope.totalCount){
-      $scope.pos+=20;
-    $http.get('/getDetailData?camID='+ 100 +'&sex='+sex+'&startTime='+$scope.start+'&endTime='+$scope.end+'&limitStartPos='+$scope.pos+'&limitNumber=20').success(function(res){
+      $scope.pos+=10;
+    $http.get('/getDetailData?camID='+ 100 +'&startTime='+$scope.start+'&endTime='+$scope.end+'&limitStartPos='+$scope.pos+'&limitNumber=10').success(function(res){
       console.log(res)
       $scope.userList = res.data.list
       $scope.page++
+      $scope.getTime();
       if($scope.page==$scope.totalPage){
           $('.next').attr('disabled',true)
         }
